@@ -6,18 +6,32 @@
   <title>Catálogo Técnico y Presupuestador - Fábrica de Aberturas</title>
   <style>
     :root {
-      /* Nueva Paleta Pastel inspirada en image_8.png */
-      --bg: #fdfaf7; /* Un fondo cálido y muy suave */
-      --card-bg: rgba(255, 255, 255, 0.75); /* Base para el efecto vidrio */
-      --text: #2c3e50; /* Texto oscuro y nítido */
+      /* NUEVA PALETA PASTEL DE image_9.png */
+      --bg: #fcfcfc; /* Un fondo neutral súper claro y limpio */
+      --card-bg: #ffffff; /* Las tarjetas ahora son blanco puro para destacar sobre el fondo */
+      --text: #333333; /* Texto oscuro y nítido para alta legibilidad */
+      --primary: #333333;
       
-      /* Gradientes suaves y pastel para acentos */
-      --gradient-a: linear-gradient(135deg, #FF9EBE 0%, #D8BFD8 100%); /* Rosa pastel a Lavanda */
-      --gradient-b: linear-gradient(135deg, #a2d2ff 0%, #d8bfd8 100%); /* Azul suave a Lavanda */
-      --gradient-accent: linear-gradient(135deg, #16a085 0%, #1abc9c 100%); /* Tu verde acento adaptado */
+      /* MAPEO DE COLORES DE LA PALETA image_9.png */
+      --pastel-mint: #86EDCB;     /* Mint principal para acentos positivos */
+      --pastel-yellow: #FFCD64;   /* Amarillo para filtros o detalles secundarios */
+      --pastel-green: #DDEBA5;    /* Verde lima para hover sutil */
+      --pastel-coral: #FA9B78;    /* Coral/Peach para peligros o eliminación */
+      --pastel-lavender: #CCA8DA; /* Lavanda para acentos secundarios */
+
+      /* Asignación de variables principales */
+      --accent: #86EDCB; /* Mint como color de acento principal */
+      --danger: #FA9B78; /* Coral para el botón de eliminar, manteniendo la estética pastel */
       
-      --danger: #e74c3c;
-      --blur-effect: blur(10px); /* El efecto de desenfoque de vidrio */
+      /* NUEVOS GRADIENTES BASADOS EN LA PALETA */
+      /* Gradiente A (Cálido): Lavender-Yellow para filtros secundarios */
+      --gradient-a: linear-gradient(135deg, #CCA8DA 0%, #FFCD64 100%); 
+      /* Gradiente B (Frío): Mint-Lavender para el header del carrito */
+      --gradient-b: linear-gradient(135deg, #86EDCB 0%, #CCA8DA 100%); 
+      /* Gradiente Accent: Mint-Green para botones principales y acentos */
+      --gradient-accent: linear-gradient(135deg, #86EDCB 0%, #DDEBA5 100%); 
+      
+      --blur-effect: blur(10px); /* Efecto de desenfoque para Soft UI */
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
@@ -30,42 +44,42 @@
     /* --- BUSCADOR Y CONTENEDOR DE FILTROS (Soft UI) --- */
     .search-container { max-width: 1200px; margin: 0 auto 25px auto; background: var(--card-bg); padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); backdrop-filter: var(--blur-effect); border: 1px solid rgba(255,255,255,0.4); position: relative; z-index: 10; }
     .search-box { width: 100%; padding: 18px; border: 1px solid rgba(0,0,0,0.06); border-radius: 12px; font-size: 1.15rem; transition: all 0.3s; background: rgba(255,255,255,0.6); color: var(--text); box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
-    .search-box:focus { border-color: #D8BFD8; outline: none; box-shadow: inset 0 2px 4px rgba(0,0,0,0.03), 0 0 10px rgba(216, 191, 216, 0.4); }
+    .search-box:focus { border-color: var(--pastel-yellow); outline: none; box-shadow: inset 0 2px 4px rgba(0,0,0,0.03), 0 0 10px rgba(255, 205, 100, 0.4); }
 
     .category-filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 5px; }
-    /* Botones Súper Redondeados y sin emojis */
     .filter-btn { padding: 10px 22px; background: #eaeded; border: none; border-radius: 50px; cursor: pointer; font-weight: 700; color: #7f8c8d; transition: all 0.3s; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; border: 1px solid transparent; }
-    .filter-btn.active, .filter-btn:hover { background: var(--gradient-a); color: white; box-shadow: 0 4px 15px rgba(216, 191, 216, 0.4); border-color: rgba(255,255,255,0.4); }
+    /* Filtros activos usan el gradiente A (cálido) */
+    .filter-btn.active, .filter-btn:hover { background: var(--gradient-a); color: white; box-shadow: 0 4px 15px rgba(204, 168, 218, 0.3); border-color: rgba(255,255,255,0.4); }
 
     .advanced-filters { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(0,0,0,0.06); }
     .filter-group { display: flex; flex-direction: column; gap: 5px; min-width: 200px; flex: 1; }
     .filter-group label { font-size: 0.8rem; font-weight: bold; color: #7f8c8d; text-transform: uppercase; letter-spacing: 1px; }
     .filter-select { padding: 12px; border: 1px solid rgba(0,0,0,0.06); border-radius: 10px; background: rgba(255,255,255,0.6); font-size: 0.95rem; cursor: pointer; color: var(--text); outline: none; }
 
-    /* FILA DE CONTROLES (Contador y Switcher minimalistao) */
+    /* FILA DE CONTROLES */
     .controls-row { max-width: 1200px; margin: 0 auto 15px auto; display: flex; justify-content: space-between; align-items: center; gap: 10px; z-index: 10; position: relative; }
     .results-counter { font-weight: 700; color: #7f8c8d; font-size: 0.9rem; }
-    .reset-link { color: #FF9EBE; cursor: pointer; text-decoration: underline; font-size: 0.85rem; font-weight: bold; margin-left: 10px; }
+    .reset-link { color: var(--pastel-coral); cursor: pointer; text-decoration: underline; font-size: 0.85rem; font-weight: bold; margin-left: 10px; }
     
     .view-switcher { display: flex; background: #eaeded; padding: 5px; border-radius: 50px; gap: 5px; }
     .view-btn { padding: 7px 18px; border: none; background: transparent; font-weight: 700; color: #7f8c8d; border-radius: 50px; cursor: pointer; transition: all 0.2s; font-size: 0.8rem; text-transform: uppercase; }
     .view-btn.active { background: white; color: var(--text); box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
 
-    /* --- CONTENEDOR PRINCIPAL DINÁMICO (Gradients) --- */
+    /* --- CONTENEDOR PRINCIPAL DINÁMICO --- */
     .grid-productos { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; z-index: 10; position: relative; }
     
-    /* --- VISTA TARJETAS (NUEVO DISEÑO SUAVE Y FLOTANTE) --- */
-    .card { background: var(--card-bg); border-radius: 20px; padding: 25px; border: 1px solid rgba(255,255,255,0.4); box-shadow: 0 10px 30px rgba(0,0,0,0.03); transition: all 0.3s ease-in-out; display: flex; flex-direction: column; backdrop-filter: var(--blur-effect); position: relative; overflow: hidden; }
-    /* Gradiente pastel de fondo solo visible al hover */
+    /* --- VISTA TARJETAS --- */
+    .card { background: var(--card-bg); border-radius: 20px; padding: 25px; border: 1px solid rgba(0,0,0,0.03); box-shadow: 0 10px 30px rgba(0,0,0,0.03); transition: all 0.3s ease-in-out; display: flex; flex-direction: column; backdrop-filter: var(--blur-effect); position: relative; overflow: hidden; }
+    /* Hover de tarjeta con gradiente B (frío) muy sutil */
     .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--gradient-b); opacity: 0; transition: opacity 0.3s; z-index: 1; }
-    .card:hover { transform: translateY(-8px); box-shadow: 0 15px 45px rgba(0,0,0,0.07); }
-    .card:hover::before { opacity: 0.05; } /* Un efecto muy sutil de fondo */
-
-    .card > * { position: relative; z-index: 2; } /* Aseguramos que el contenido esté sobre el pseudoelemento */
+    .card:hover { transform: translateY(-5px); box-shadow: 0 15px 45px rgba(0,0,0,0.07); }
+    .card:hover::before { opacity: 0.05; }
+    .card > * { position: relative; z-index: 2; }
 
     .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; gap: 10px; }
-    .card .cat { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #D8BFD8; letter-spacing: 1px; }
-    .badge-medida-top { background: #fdfaf7; padding: 4px 10px; border-radius: 8px; font-weight: 800; font-size: 0.8rem; color: #555; white-space: nowrap; border: 1px solid rgba(0,0,0,0.04); }
+    /* Categoría usa el acento principal (mint) */
+    .card .cat { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--pastel-mint); letter-spacing: 1px; }
+    .badge-medida-top { background: var(--bg); padding: 4px 10px; border-radius: 8px; font-weight: 800; font-size: 0.8rem; color: #555; white-space: nowrap; border: 1px solid rgba(0,0,0,0.04); }
     .card .title { font-size: 1.35rem; color: var(--text); font-weight: 800; margin-bottom: 15px; letter-spacing: -0.5px; }
     .card .info-line { margin-bottom: 7px; font-size: 0.9rem; color: #444; }
     .card .info-line span { font-weight: 700; color: #555; }
@@ -73,39 +87,40 @@
     .price-container { margin-top: auto; padding-top: 15px; border-top: 1px dashed rgba(0,0,0,0.06); display: flex; align-items: center; gap: 8px; margin-bottom: 15px; }
     .price-label { font-size: 0.9rem; font-weight: bold; color: var(--text); }
     .price-input-wrapper { display: flex; align-items: center; position: relative; flex: 1; }
-    .price-symbol { position: absolute; left: 10px; font-weight: bold; color: #1abc9c; font-size: 1.1rem; }
-    .price-input { width: 100%; padding: 10px 10px 10px 28px; border: 1px solid rgba(0,0,0,0.06); border-radius: 10px; font-weight: 800; color: #1abc9c; font-size: 1.1rem; outline: none; transition: all 0.2s; background: rgba(255,255,255,0.6); }
-    .price-input:focus { border-color: #1abc9c; background-color: #faffff; }
-    /* Quitar las flechitas por defecto de los inputs de tipo número */
+    /* Símbolo de precio en mint */
+    .price-symbol { position: absolute; left: 10px; font-weight: bold; color: var(--pastel-mint); font-size: 1.1rem; }
+    .price-input { width: 100%; padding: 10px 10px 10px 28px; border: 1px solid rgba(0,0,0,0.06); border-radius: 10px; font-weight: 800; color: var(--pastel-mint); font-size: 1.1rem; outline: none; transition: all 0.2s; background: rgba(255,255,255,0.6); }
+    .price-input:focus { border-color: var(--pastel-mint); background-color: #faffff; }
     .price-input::-webkit-outer-spin-button, .price-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
     .price-input { -moz-appearance: textfield; }
 
-    /* Botón Agregar (Súper Redondeado y Gradient) */
-    .btn-add-cart { width: 100%; padding: 12px; background: var(--gradient-accent); color: white; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; transition: all 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 0.9rem; }
-    .btn-add-cart:hover { box-shadow: 0 4px 15px rgba(26, 188, 156, 0.3); }
+    /* Botón Agregar usa el gradiente de acento (mint-green) */
+    .btn-add-cart { width: 100%; padding: 12px; background: var(--gradient-accent); color: white; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; transition: all 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
+    .btn-add-cart:hover { box-shadow: 0 4px 15px rgba(134, 237, 203, 0.3); }
 
-    /* --- VISTA TABLA (Soft UI Planilla) --- */
+    /* --- VISTA TABLA --- */
     .tabla-contenedor { width: 100%; overflow-x: auto; background: var(--card-bg); border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid rgba(255,255,255,0.4); backdrop-filter: var(--blur-effect); }
     .tabla-productos { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
-    .tabla-productos th { background: #fdfaf7; color: #7f8c8d; padding: 15px; font-weight: bold; border-bottom: 2px solid rgba(0,0,0,0.04); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
+    .tabla-productos th { background: var(--bg); color: #7f8c8d; padding: 15px; font-weight: bold; border-bottom: 2px solid rgba(0,0,0,0.04); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
     .tabla-productos td { padding: 12px 15px; border-bottom: 1px solid rgba(0,0,0,0.03); color: #444; vertical-align: middle; }
     .tabla-productos tr:last-child td { border-bottom: none; }
-    .tabla-productos tr:hover td { background-color: #f6faff; }
+    .tabla-productos tr:hover td { background-color: #faffff; }
     
     .tabla-price-wrapper { display: flex; align-items: center; position: relative; width: 130px; }
-    .tabla-price-input { width: 100%; padding: 7px 7px 7px 22px; border: 1px solid rgba(0,0,0,0.06); border-radius: 8px; font-weight: 800; color: #1abc9c; outline: none; background: rgba(255,255,255,0.6); }
+    .tabla-price-input { width: 100%; padding: 7px 7px 7px 22px; border: 1px solid rgba(0,0,0,0.06); border-radius: 8px; font-weight: 800; color: var(--pastel-mint); outline: none; background: rgba(255,255,255,0.6); }
     .tabla-btn-add { padding: 7px 14px; background: var(--gradient-accent); color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; font-size: 0.9rem; }
-    .tabla-btn-add:hover { box-shadow: 0 4px 10px rgba(26, 188, 156, 0.2); }
 
-    /* --- INTERFAZ CARRITO / PRESUPUESTO (Soft UI) --- */
-    /* Botón flotante sin emoji */
-    .cart-float-btn { position: fixed; bottom: 25px; right: 25px; background: var(--gradient-accent); color: white; border: none; padding: 16px 24px; border-radius: 50px; font-size: 1rem; font-weight: bold; cursor: pointer; box-shadow: 0 10px 25px rgba(26, 188, 156, 0.3); display: flex; align-items: center; gap: 10px; z-index: 999; transition: transform 0.2s; text-transform: uppercase; letter-spacing: 1px; }
+    /* --- INTERFAZ CARRITO / PRESUPUESTO (Soft UI con nueva paleta) --- */
+    /* Botón flotante usa el gradiente de acento (mint-green) */
+    .cart-float-btn { position: fixed; bottom: 25px; right: 25px; background: var(--gradient-accent); color: white; border: none; padding: 16px 24px; border-radius: 50px; font-size: 1rem; font-weight: bold; cursor: pointer; box-shadow: 0 10px 25px rgba(134, 237, 203, 0.3); display: flex; align-items: center; gap: 10px; z-index: 999; transition: transform 0.2s; text-transform: uppercase; letter-spacing: 1px; }
     .cart-float-btn:hover { transform: scale(1.05); }
-    .cart-badge { background: white; color: #1abc9c; padding: 3px 9px; border-radius: 12px; font-size: 0.85rem; font-weight: 900; }
+    /* Badge en blanco con texto mint */
+    .cart-badge { background: white; color: var(--pastel-mint); padding: 3px 9px; border-radius: 12px; font-size: 0.85rem; font-weight: 900; }
 
     .cart-sidebar { position: fixed; top: 10px; right: -420px; width: 400px; height: calc(100vh - 20px); background: var(--card-bg); box-shadow: -10px 0 30px rgba(0,0,0,0.05); z-index: 1000; transition: right 0.3s ease-out; display: flex; flex-direction: column; border-radius: 20px 0 0 20px; backdrop-filter: var(--blur-effect); border: 1px solid rgba(255,255,255,0.4); border-right: none; }
     .cart-sidebar.open { right: 10px; }
-    .cart-header { padding: 25px; background: var(--gradient-a); color: white; display: flex; justify-content: space-between; align-items: center; border-radius: 18px 0 0 0; }
+    /* Header del carrito usa gradiente B (mint-lavender) */
+    .cart-header { padding: 25px; background: var(--gradient-b); color: white; display: flex; justify-content: space-between; align-items: center; border-radius: 18px 0 0 0; }
     .cart-header h2 { font-weight: 800; letter-spacing: -1px; font-size: 1.5rem; }
     .cart-close { background: transparent; border: none; color: white; font-size: 1.8rem; cursor: pointer; }
     
@@ -117,59 +132,66 @@
     
     .cart-item-controls { display: flex; align-items: center; gap: 8px; }
     .qty-input { width: 50px; padding: 6px; text-align: center; border: 1px solid rgba(0,0,0,0.06); border-radius: 6px; font-weight: bold; background: rgba(255,255,255,0.6); color: var(--text); }
-    /* Reemplazo de ❌ por símbolo &times; */
-    .btn-remove-item { background: transparent; border: none; color: var(--danger); font-weight: bold; cursor: pointer; padding: 4px; font-size: 1.5rem; line-height: 1; }
+    /* Símbolo &times; para eliminar en coral */
+    .btn-remove-item { background: transparent; border: none; color: var(--pastel-coral); font-weight: bold; cursor: pointer; padding: 4px; font-size: 1.5rem; line-height: 1; }
     
-    .cart-footer { padding: 25px; background: #fdfaf7; border-top: 1px solid rgba(0,0,0,0.04); border-radius: 0 0 0 18px; }
-    /* Campo de Bonificación minimalistao */
-    .bonif-container { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.6); padding: 12px 16px; border-radius: 10px; border: 1px dashed #D8BFD8; margin-bottom: 15px; }
+    .cart-footer { padding: 25px; background: var(--bg); border-top: 1px solid rgba(0,0,0,0.04); border-radius: 0 0 0 18px; }
+    /* Campo de Bonificación usa borde lavanda */
+    .bonif-container { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.6); padding: 12px 16px; border-radius: 10px; border: 1px dashed var(--pastel-lavender); margin-bottom: 15px; }
     .bonif-label { font-weight: bold; font-size: 0.85rem; color: #7f8c8d; text-transform: uppercase; letter-spacing: 1px; }
     .bonif-input-wrapper { display: flex; align-items: center; gap: 5px; }
-    .bonif-input { width: 70px; padding: 7px; border: 1px solid rgba(0,0,0,0.06); border-radius: 6px; font-weight: bold; text-align: center; color: #D8BFD8; font-size: 1.1rem; background: rgba(255,255,255,0.6); }
+    .bonif-input { width: 70px; padding: 7px; border: 1px solid rgba(0,0,0,0.06); border-radius: 6px; font-weight: bold; text-align: center; color: var(--pastel-lavender); font-size: 1.1rem; background: rgba(255,255,255,0.6); }
 
-    .cart-total-row { display: flex; justify-content: space-between; font-size: 1.3rem; font-weight: 800; color: var(--text); margin-bottom: 18px; letter-spacing: -0.5px; }
+    /* Total Neto resaltado en mint */
+    .cart-total-row { display: flex; justify-content: space-between; font-size: 1.3rem; font-weight: 800; color: var(--pastel-mint); margin-bottom: 18px; letter-spacing: -0.5px; }
+    
+    /* Botón Generar Documento usa gradiente B (mint-lavender) */
     .btn-generate-budget { width: 100%; padding: 14px; background: var(--gradient-b); color: white; border: none; border-radius: 50px; font-size: 1rem; font-weight: 800; cursor: pointer; transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px; }
-    .btn-generate-budget:hover { box-shadow: 0 4px 15px rgba(216, 191, 216, 0.3); }
+    .btn-generate-budget:hover { box-shadow: 0 4px 15px rgba(134, 237, 203, 0.3); }
 
-    /* --- MODAL IMPRESIÓN PRESUPUESTO OFICIAL (Clean UI) --- */
+    /* --- MODAL IMPRESIÓN PRESUPUESTO --- */
     .modal-budget { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 2000; display: none; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(5px); }
     .modal-budget.open { display: flex; }
     .modal-budget-content { background: white; width: 100%; max-width: 850px; max-height: 90vh; border-radius: 20px; display: flex; flex-direction: column; box-shadow: 0 15px 45px rgba(0,0,0,0.15); overflow: hidden; }
     .modal-budget-actions { padding: 18px 25px; background: #eaeded; border-bottom: 1px solid rgba(0,0,0,0.04); display: flex; justify-content: space-between; align-items: center; }
     .modal-budget-actions > span { font-weight: bold; color: #7f8c8d; font-size: 0.9rem; }
-    /* Botones minimalistao */
-    .btn-print { padding: 10px 24px; background: var(--gradient-accent); color: white; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; transition: all 0.2s; }
-    .btn-print:hover { box-shadow: 0 4px 10px rgba(26, 188, 156, 0.3); }
-    .btn-close-budget { padding: 10px 20px; background: #95a5a6; color: white; border: none; border-radius: 50px; cursor: pointer; margin-left: 10px; font-weight: bold; }
+    /* Botón Imprimir usa acento dinámico (mint-green) */
+    .btn-print { padding: 10px 24px; background: var(--gradient-accent); color: white; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px; }
+    .btn-print:hover { box-shadow: 0 4px 10px rgba(134, 237, 203, 0.3); }
+    .btn-close-budget { padding: 10px 20px; background: #95a5a6; color: white; border: none; border-radius: 50px; cursor: pointer; margin-left: 10px; font-weight: bold; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px;}
     
     .print-area { padding: 45px; flex: 1; overflow-y: auto; background: white; color: #333; }
-    .print-header { display: flex; justify-content: space-between; border-bottom: 3px solid var(--text); padding-bottom: 25px; margin-bottom: 25px; }
-    .print-company-info h2 { color: var(--text); font-size: 1.8rem; font-weight: 900; letter-spacing: -1px; }
+    /* Títulos de impresión en neutral oscuro */
+    .print-header { display: flex; justify-content: space-between; border-bottom: 3px solid #333; padding-bottom: 25px; margin-bottom: 25px; }
+    .print-company-info h2 { color: #333; font-size: 1.8rem; font-weight: 900; letter-spacing: -1px; }
     .print-company-info p { font-size: 0.85rem; color: #555; margin-top: 4px; }
     .print-budget-title { text-align: right; }
     .print-budget-title h3 { text-transform: uppercase; color: #7f8c8d; font-size: 1.1rem; font-weight: bold; letter-spacing: 1px; }
     .print-budget-title p { font-size: 0.9rem; margin-top: 6px; font-weight: bold; color: #333; }
     
     .print-table { width: 100%; border-collapse: collapse; margin-top: 25px; margin-bottom: 25px; font-size: 0.85rem; }
-    .print-table th { border-bottom: 2px solid #555; padding: 12px; text-align: left; background: #fdfaf7; color: #333; }
+    /* Tabla th usa el fondo neutral claro */
+    .print-table th { border-bottom: 2px solid #555; padding: 12px; text-align: left; background: var(--bg); color: #333; }
     .print-table td { padding: 12px; border-bottom: 1px solid rgba(0,0,0,0.03); vertical-align: middle; }
-    .print-table tr:hover td { background-color: transparent; } /* Desactivar hover en impresión modal */
     
-    .print-summary-box { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; padding-top: 20px; border-top: 3px solid var(--text); margin-top: 15px; }
+    /* Resumen total con borde en neutral oscuro */
+    .print-summary-box { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; padding-top: 20px; border-top: 3px solid #333; margin-top: 15px; }
     .print-summary-line { font-size: 1rem; color: #555; }
-    .print-total { font-size: 1.5rem; font-weight: 900; color: var(--text); margin-top: 8px; letter-spacing: -0.5px; }
+    /* Total Final resaltado en el acento principal (mint) */
+    .print-total { font-size: 1.5rem; font-weight: 900; color: var(--pastel-mint); margin-top: 8px; letter-spacing: -0.5px; }
     .print-conditions { margin-top: 45px; font-size: 0.8rem; color: #7f8c8d; border-top: 1px dashed rgba(0,0,0,0.08); padding-top: 18px; line-height: 1.4; }
 
     .no-results { grid-column: 1 / -1; text-align: center; padding: 30px 0; color: #888; font-size: 1.2rem; background: rgba(255,255,255,0.6); border-radius: 12px; border: 1px dashed rgba(0,0,0,0.06); margin: 20px 0; }
 
-    /* --- AJUSTES EXCLUSIVOS PARA IMPRESIÓN EN PAPEL/PDF --- */
+    /* AJUSTES EXCLUSIVOS PARA IMPRESIÓN EN PAPEL/PDF */
     @media print {
       body { padding: 0; background: white; }
       body * { visibility: hidden; }
       #modal-budget, #modal-budget.open { position: absolute; left: 0; top: 0; width: 100%; background: white; display: block; overflow: visible; backdrop-filter: none; }
       .print-area, .print-area * { visibility: visible; }
       .print-area { position: absolute; left: 0; top: 0; width: 100%; padding: 0; overflow: visible; box-shadow: none; border-radius: 0; }
-      .print-table th { background: #f0f0f0 !important; color: black !important; }
+      .print-table th { background: #f0f0f0 !important; color: black !important; border-bottom: 2px solid black; }
+      .print-company-info h2, .print-total { color: black !important; }
       .modal-budget-content { box-shadow: none; border-radius: 0; position: absolute; width: 100%; height: 100%; }
       .modal-budget-actions, .bonif-container { display: none !important; }
     }
@@ -453,7 +475,7 @@
         productosFiltrados.forEach(p => {
           bodyHTML += `
             <tr>
-              <td><strong style="color: var(--gradient-accent); font-size: 0.8rem; text-transform: uppercase;">${p.categoria}</strong></td>
+              <td><strong style="color: var(--pastel-mint); font-size: 0.8rem; text-transform: uppercase;">${p.categoria}</strong></td>
               <td><strong>${p.linea}</strong></td>
               <td>${p.sistema}</td>
               <td>${p.detalle}</td>
@@ -530,8 +552,9 @@
         totalItems += item.cantidad;
 
         // Estilización condicional por si el costo unitario base es $0 (¡BONIF!)
+        // Usamos el color pastel-coral para el texto del total en este caso
         const displayPrecioUnitario = item.precio === 0 
-          ? `<span style="color: var(--danger); font-weight: bold; background: #fdedec; padding: 2px 6px; border-radius: 4px; font-size:0.75rem;">¡BONIF!</span>` 
+          ? `<span style="color: var(--pastel-coral); font-weight: bold; background: #fdedec; padding: 2px 6px; border-radius: 4px; font-size:0.75rem;">¡BONIF!</span>` 
           : `$${item.precio}`;
 
         const cartElement = document.createElement('div');
@@ -632,7 +655,7 @@
     selectMedida.addEventListener('change', renderizarProductos);
     buscador.addEventListener('input', renderizarProductos);
 
-    // Botón para resetear todos los filtros aplicados (sin emoji)
+    // Botón para resetear todos los filtros aplicados (sin emoji, usa coral para destacar)
     btnLimpiar.addEventListener('click', () => {
       buscador.value = '';
       categoriaSeleccionada = "Todos";
