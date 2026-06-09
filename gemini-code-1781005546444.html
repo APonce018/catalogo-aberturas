@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catálogo Técnico y Presupuestador - Fábrica de Aberturas</title>
+  <style>
+    :root {
+      --primary: #2c3e50;
+      --accent: #16a085;
+      --bg: #f8f9fa;
+      --card-bg: #ffffff;
+      --text: #333333;
+      --danger: #e74c3c;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); padding: 20px; position: relative; min-height: 100vh; }
+    
+    header { max-width: 1200px; margin: 0 auto 30px auto; text-align: center; }
+    header h1 { color: var(--primary); margin-bottom: 10px; font-size: 2rem; }
+    header p { color: #666; }
+
+    .search-container { max-width: 1200px; margin: 0 auto 25px auto; background: var(--card-bg); padding: 20px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+    .search-box { width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 6px; font-size: 1.1rem; transition: border-color 0.3s; margin-bottom: 15px; }
+    .search-box:focus { border-color: var(--accent); outline: none; }
+
+    .advanced-filters { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 15px; padding-top: 15px; border-top: 1px dashed #ddd; }
+    .filter-group { display: flex; flex-direction: column; gap: 5px; min-width: 200px; flex: 1; }
+    .filter-group label { font-size: 0.85rem; font-weight: bold; color: var(--primary); text-transform: uppercase; }
+    .filter-select { padding: 10px; border: 2px solid #eee; border-radius: 6px; background: white; font-size: 0.95rem; outline: none; cursor: pointer; }
+    .filter-select:focus { border-color: var(--accent); }
+
+    .category-filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 5px; }
+    .filter-btn { padding: 8px 16px; background: #eee; border: none; border-radius: 20px; cursor: pointer; font-weight: 600; color: #555; transition: all 0.3s; }
+    .filter-btn.active, .filter-btn:hover { background: var(--accent); color: white; }
+
+    .controls-row { max-width: 1200px; margin: 0 auto 15px auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+    .results-counter { font-weight: 600; color: #666; display: flex; gap: 15px; align-items: center; }
+    .reset-link { color: var(--accent); cursor: pointer; text-decoration: underline; font-size: 0.9rem; }
+    
+    .view-switcher { display: flex; background: #e5e8e8; padding: 4px; border-radius: 8px; gap: 4px; }
+    .view-btn { padding: 6px 14px; border: none; background: transparent; font-weight: bold; color: #555; border-radius: 6px; cursor: pointer; transition: all 0.2s; font-size: 0.9rem; }
+    .view-btn.active { background: white; color: var(--primary); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+
+    /* CONTENEDOR PRINCIPAL DINÁMICO */
+    .grid-productos { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+    
+    /* VISTA TARJETAS */
+    .card { background: var(--card-bg); border-radius: 8px; padding: 20px; border-left: 5px solid var(--primary); box-shadow: 0 4px 6px rgba(0,0,0,0.02); transition: transform 0.2s; display: flex; flex-direction: column; }
+    .card:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.08); }
+    .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; gap: 10px; }
+    .card .cat { font-size: 0.8rem; font-weight: bold; text-transform: uppercase; color: var(--accent); }
+    .badge-medida-top { background: #eaeded; padding: 3px 8px; border-radius: 4px; font-weight: bold; font-size: 0.85rem; color: var(--primary); white-space: nowrap; }
+    .card .title { font-size: 1.2rem; color: var(--primary); font-weight: 700; margin-bottom: 10px; }
+    .card .info-line { margin-bottom: 6px; font-size: 0.95rem; }
+    .card .info-line span { font-weight: 600; color: #555; }
+    
+    .price-container { margin-top: auto; padding-top: 15px; border-top: 1px dashed #eee; display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+    .price-label { font-size: 0.9rem; font-weight: bold; color: var(--primary); }
+    .price-input-wrapper { display: flex; align-items: center; position: relative; flex: 1; }
+    .price-symbol { position: absolute; left: 10px; font-weight: bold; color: var(--accent); font-size: 1.05rem; }
+    .price-input { width: 100%; padding: 8px 8px 8px 24px; border: 2px solid #eee; border-radius: 6px; font-weight: bold; color: var(--accent); font-size: 1.05rem; outline: none; transition: all 0.2s; }
+    .price-input:focus { border-color: var(--accent); background-color: #faffff; }
+
+    .btn-add-cart { width: 100%; padding: 10px; background: var(--primary); color: white; border: none; border-radius: 6px; font-weight: bold; cursor: pointer; transition: background 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; }
+    .btn-add-cart:hover { background: var(--accent); }
+
+    /* VISTA TABLA */
+    .tabla-contenedor { width: 100%; overflow-x: auto; background: var(--card-bg); border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); border: 1px solid #eee; }
+    .tabla-productos { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.95rem; }
+    .tabla-productos th { background: #f4f6f6; color: var(--primary); padding: 12px 16px; font-weight: 700; border-bottom: 2px solid #eee; }
+    .tabla-productos td { padding: 10px 16px; border-bottom: 1px solid #eee; color: #444; vertical-align: middle; }
+    .tabla-productos tr:hover td { background-color: #f6faff; }
+    
+    .tabla-price-wrapper { display: flex; align-items: center; position: relative; width: 120px; }
+    .tabla-price-input { width: 100%; padding: 6px 6px 6px 20px; border: 1px solid #ccc; border-radius: 4px; font-weight: bold; color: var(--accent); outline: none; }
+    .tabla-btn-add { padding: 6px 12px; background: var(--primary); color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+    .tabla-btn-add:hover { background: var(--accent); }
+
+    /* BOTÓN FLOTANTE DEL CARRITO */
+    .cart-float-btn { position: fixed; bottom: 25px; right: 25px; background: var(--accent); color: white; border: none; padding: 15px 22px; border-radius: 50px; font-size: 1.1rem; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); display: flex; align-items: center; gap: 10px; z-index: 999; transition: transform 0.2s; }
+    .cart-float-btn:hover { transform: scale(1.05); }
+    .cart-badge { background: white; color: var(--accent); padding: 2px 8px; border-radius: 10px; font-size: 0.9rem; font-weight: 800; }
+
+    /* SIDEBAR DEL CARRITO */
+    .cart-sidebar { position: fixed; top: 0; right: -400px; width: 400px; height: 100vh; background: white; box-shadow: -5px 0 15px rgba(0,0,0,0.1); z-index: 1000; transition: right 0.3s ease; display: flex; flex-direction: column; }
+    .cart-sidebar.open { right: 0; }
+    .cart-header { padding: 20px; background: var(--primary); color: white; display: flex; justify-content: space-between; align-items: center; }
+    .cart-close { background: transparent; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
+    
+    .cart-items-list { padding: 20px; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+    .cart-item { display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px dashed #eee; font-size: 0.9rem; }
+    .cart-item-details { flex: 1; padding-right: 10px; }
+    .cart-item-title { font-weight: bold; color: var(--primary); }
+    .cart-item-meta { font-size: 0.8rem; color: #666; margin-top: 2px; }
+    
+    .cart-item-controls { display: flex; align-items: center; gap: 8px; }
+    .qty-input { width: 45px; padding: 4px; text-align: center; border: 1px solid #ccc; border-radius: 4px; font-weight: bold; }
+    .btn-remove-item { background: transparent; border: none; color: var(--danger); font-weight: bold; cursor: pointer; padding: 4px; }
+    
+    .cart-footer { padding: 20px; background: #f4f6f6; border-top: 1px solid #ddd; }
+    
+    /* CAMPO DE BONIFICACIÓN ESTILIZADO */
+    .bonif-container { display: flex; align-items: center; justify-content: space-between; background: white; padding: 10px 14px; border-radius: 6px; border: 1px dashed var(--accent); margin-bottom: 15px; }
+    .bonif-label { font-weight: bold; font-size: 0.9rem; color: var(--primary); display: flex; align-items: center; gap: 6px; }
+    .bonif-input-wrapper { display: flex; align-items: center; gap: 5px; }
+    .bonif-input { width: 65px; padding: 6px; border: 1px solid #ccc; border-radius: 4px; font-weight: bold; text-align: center; color: var(--accent); font-size: 1rem; }
+
+    .cart-total-row { display: flex; justify-content: space-between; font-size: 1.2rem; font-weight: bold; color: var(--primary); margin-bottom: 15px; }
+    .btn-generate-budget { width: 100%; padding: 12px; background: var(--accent); color: white; border: none; border-radius: 6px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+    .btn-generate-budget:hover { background: #117a65; }
+
+    /* MODAL IMPRESIÓN PRESUPUESTO */
+    .modal-budget { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 2000; display: none; justify-content: center; align-items: center; padding: 20px; }
+    .modal-budget.open { display: flex; }
+    .modal-budget-content { background: white; width: 100%; max-width: 850px; max-height: 90vh; border-radius: 8px; display: flex; flex-direction: column; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+    .modal-budget-actions { padding: 15px 20px; background: #eee; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; align-items: center; }
+    .btn-print { padding: 8px 20px; background: var(--accent); color: white; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; }
+    .btn-close-budget { padding: 8px 15px; background: #95a5a6; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    
+    .print-area { padding: 40px; flex: 1; overflow-y: auto; background: white; }
+    .print-header { display: flex; justify-content: space-between; border-bottom: 2px solid var(--primary); padding-bottom: 20px; margin-bottom: 20px; }
+    .print-company-info h2 { color: var(--primary); font-size: 1.6rem; }
+    .print-company-info p { font-size: 0.85rem; color: #555; margin-top: 3px; }
+    .print-budget-title { text-align: right; }
+    .print-budget-title h3 { text-transform: uppercase; color: #555; font-size: 1.1rem; }
+    .print-budget-title p { font-size: 0.9rem; margin-top: 5px; font-weight: bold; }
+    
+    .print-table { width: 100%; border-collapse: collapse; margin-top: 20px; margin-bottom: 20px; }
+    .print-table th { border-bottom: 2px solid #333; padding: 10px; text-align: left; font-size: 0.9rem; background: #f9f9f9; }
+    .print-table td { padding: 10px; border-bottom: 1px solid #eee; font-size: 0.9rem; vertical-align: middle; }
+    
+    .print-summary-box { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; padding-top: 15px; border-top: 2px solid #333; margin-top: 10px; }
+    .print-summary-line { font-size: 1rem; color: #555; }
+    .print-total { font-size: 1.4rem; font-weight: bold; color: var(--primary); margin-top: 5px; }
+    .print-conditions { margin-top: 35px; font-size: 0.8rem; color: #777; border-top: 1px dashed #ccc; padding-top: 15px; }
+
+    .no-results { grid-column: 1 / -1; text-align: center; padding: 20px 0; color: #888; font-size: 1.2rem; background: white; border-radius: 8px; border: 1px dashed #ccc; }
+
+    @media print {
+      body * { visibility: hidden; }
+      .modal-budget, .modal-budget.open { position: absolute; left: 0; top: 0; width: 100%; background: white; display: block; }
+      .print-area, .print-area * { visibility: visible; }
+      .print-area { position: absolute; left: 0; top: 0; width: 100%; padding: 0; overflow: visible; }
+      .modal-budget-actions { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Catálogo de Aberturas</h1>
+    <p>Buscador interno optimizado para consultas rápidas de stock y variantes</p>
+  </header>
+
+  <div class="search-container">
+    <input type="text" id="buscador" class="search-box" placeholder="🔍 Escribí para buscar... Ej: 'Ventana 1200x1160', 'Puerta', 'Portón'...">
+    
+    <div class="category-filters" id="contenedor-filtros">
+      <button class="filter-btn active" data-cat="Todos">Todos los Productos</button>
+    </div>
+
+    <div class="advanced-filters">
+      <div class="filter-group">
+        <label for="select-linea">Filtrar por Línea</label>
+        <select id="select-linea" class="filter-select">
+          <option value="Todos">Todas las líneas</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="select-medida">Filtrar por Medida</label>
+        <select id="select-medida" class="filter-select">
+          <option value="Todos">Todas las medidas</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls-row">
+    <div class="results-counter">
+      <span id="contador">Productos listados: 0</span>
+      <span id="btn-limpiar" class="reset-link" style="display:none;">Limpiar todos los filtros</span>
+    </div>
+    
+    <div class="view-switcher">
+      <button id="btn-view-grid" class="view-btn active">📱 Tarjetas</button>
+      <button id="btn-view-table" class="view-btn">📊 Tabla</button>
+    </div>
+  </div>
+
+  <main id="contenedor-principal" class="grid-productos"></main>
+
+  <button id="floating-cart-btn" class="cart-float-btn">
+    🛒 Mi Carrito <span id="cart-count" class="cart-badge">0</span>
+  </button>
+
+  <div id="cart-sidebar" class="cart-sidebar">
+    <div class="cart-header">
+      <h2>Items Seleccionados</h2>
+      <button id="cart-close-btn" class="cart-close">&times;</button>
+    </div>
+    <div id="cart-items-list" class="cart-items-list">
+      </div>
+    <div class="cart-footer">
+      
+      <div class="bonif-container">
+        <span class="bonif-label">🏷️ Bonificación Cliente:</span>
+        <div class="bonif-input-wrapper">
+          <input type="number" id="cart-bonif-input" class="bonif-input" value="0" min="0" max="100">
+          <strong style="color: var(--accent);">%</strong>
+        </div>
+      </div>
+
+      <div class="cart-total-row">
+        <span>Total Neto:</span>
+        <span id="cart-total-value">$0</span>
+      </div>
+      <button id="btn-open-budget" class="btn-generate-budget">📄 Generar Presupuesto</button>
+    </div>
+  </div>
+
+  <div id="modal-budget" class="modal-budget">
+    <div class="modal-budget-content">
+      <div class="modal-budget-actions">
+        <span>📄 Vista Previa de Cotización de Obra</span>
+        <div>
+          <button id="btn-print-now" class="btn-print">🖨️ Imprimir / Guardar PDF</button>
+          <button id="btn-close-budget-modal" class="btn-close-budget">Cerrar</button>
+        </div>
+      </div>
+      <div class="print-area">
+        <div class="print-header">
+          <div class="print-company-info">
+            <h2>FÁBRICA DE ABERTURAS</h2>
+            <p>Sección Presupuestos y Cotizaciones Comerciales</p>
+            <p>Documento Técnico de Validez Regular</p>
+          </div>
+          <div class="print-budget-title">
+            <h3>Presupuesto de Obra</h3>
+            <p id="print-date">Fecha: --/--/----</p>
+          </div>
+        </div>
+        
+        <table class="print-table">
+          <thead>
+            <tr>
+              <th style="width: 80px;">Cant.</th>
+              <th>Descripción Detallada de la Abertura</th>
+              <th style="width: 120px;">Medida</th>
+              <th style="width: 150px;">Precio Unit. (Neto)</th>
+              <th style="width: 130px;">Subtotal</th>
+            </tr>
+          </thead>
+          <tbody id="print-table-body">
+            </tbody>
+        </table>
+
+        <div class="print-summary-box">
+          <div class="print-summary-line">Suma Total Lista: <span id="print-subtotal-value">$0</span></div>
+          <div class="print-summary-line" style="color: var(--danger); font-weight: 500;">Bonificación Aplicada (<span id="print-bonif-percentage">0</span>%): <span id="print-discount-value">-$0</span></div>
+          <div id="print-total-value" class="print-total">
+            TOTAL FINAL: $0
+          </div>
+        </div>
+
+        <div class="print-conditions">
+          <p><strong>Condiciones Generales:</strong> Precios sujetos a variaciones de insumos de fábrica sin previo aviso. Plazos de entrega a coordinar con la sección técnica una vez formalizado el pago.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="productos.js"></script>
+  <script>
+    let categoriaSeleccionada = "Todos";
+    let vistaActiva = "grid";
+    let carrito = []; 
+    
+    const buscador = document.getElementById('buscador');
+    const contenedorPrincipal = document.getElementById('contenedor-principal');
+    const contador = document.getElementById('contador');
+    const contenedorFiltros = document.getElementById('contenedor-filtros');
+    const btnLimpiar = document.getElementById('btn-limpiar');
+    const selectLinea = document.getElementById('select-linea');
+    const selectMedida = document.getElementById('select-medida');
+    
+    const btnViewGrid = document.getElementById('btn-view-grid');
+    const btnViewTable = document.getElementById('btn-view-table');
+
+    // Elementos del presupuesto
+    const floatingCartBtn = document.getElementById('floating-cart-btn');
+    const cartSidebar = document.getElementById('cart-sidebar');
+    const cartCloseBtn = document.getElementById('cart-close-btn');
+    const cartItemsList = document.getElementById('cart-items-list');
+    const cartTotalValue = document.getElementById('cart-total-value');
+    const cartCount = document.getElementById('cart-count');
+    const btnOpenBudget = document.getElementById('btn-open-budget');
+    const cartBonifInput = document.getElementById('cart-bonif-input');
+    
+    // Elementos del Modal Imprimible
+    const modalBudget = document.getElementById('modal-budget');
+    const btnCloseBudgetModal = document.getElementById('btn-close-budget-modal');
+    const btnPrintNow = document.getElementById('btn-print-now');
+    const printTableBody = document.getElementById('print-table-body');
+    const printSubtotalValue = document.getElementById('print-subtotal-value');
+    const printBonifPercentage = document.getElementById('print-bonif-percentage');
+    const printDiscountValue = document.getElementById('print-discount-value');
+    const printTotalValue = document.getElementById('print-total-value');
+    const printDate = document.getElementById('print-date');
+
+    // Carga inicial y normalización de IDs
+    listadoProductos.forEach((p, index) => {
+      p.id = p.id || `prod-${index}`;
+      const precioGuardado = localStorage.getItem(`precio-${p.id}`);
+      if (precioGuardado) {
+        p.precio = precioGuardado;
+      }
+    });
+
+    // Inyectar Categorías
+    const categorias = [...new Set(listadoProductos.map(p => p.categoria))];
+    categorias.forEach(cat => {
+      const btn = document.createElement('button');
+      btn.className = 'filter-btn';
+      btn.textContent = cat;
+      btn.setAttribute('data-cat', cat);
+      contenedorFiltros.appendChild(btn);
+    });
+
+    function actualizarDesplegables() {
+      const lineaPrevia = selectLinea.value;
+      const medidaPrevia = selectMedida.value;
+
+      selectLinea.innerHTML = '<option value="Todos">Todas las líneas</option>';
+      selectMedida.innerHTML = '<option value="Todos">Todas las medidas</option>';
+
+      const productosDeCategoria = listadoProductos.filter(p => {
+        return categoriaSeleccionada === "Todos" || p.categoria === categoriaSeleccionada;
+      });
+
+      const lineasUnicas = [...new Set(productosDeCategoria.map(p => p.linea))].sort();
+      const medidasUnicas = [...new Set(productosDeCategoria.map(p => p.medida))].sort();
+
+      lineasUnicas.forEach(linea => {
+        const opt = document.createElement('option');
+        opt.value = linea;
+        opt.textContent = linea;
+        selectLinea.appendChild(opt);
+      });
+
+      medidasUnicas.forEach(medida => {
+        const opt = document.createElement('option');
+        opt.value = medida;
+        opt.textContent = medida;
+        selectMedida.appendChild(opt);
+      });
+
+      if (lineasUnicas.includes(lineaPrevia)) selectLinea.value = lineaPrevia;
+      if (medidasUnicas.includes(medidaPrevia)) selectMedida.value = medidaPrevia;
+    }
+
+    function renderizarProductos() {
+      const textoBusqueda = buscador.value.toLowerCase().trim();
+      const lineaSeleccionada = selectLinea.value;
+      const medidaSeleccionada = selectMedida.value;
+
+      if(categoriaSeleccionada !== "Todos" || lineaSeleccionada !== "Todos" || medidaSeleccionada !== "Todos" || textoBusqueda !== "") {
+        btnLimpiar.style.display = "inline";
+      } else {
+        btnLimpiar.style.display = "none";
+      }
+
+      contenedorPrincipal.innerHTML = '';
+      
+      const productosFiltrados = listadoProductos.filter(p => {
+        const coincideCategoria = (categoriaSeleccionada === "Todos" || p.categoria === categoriaSeleccionada);
+        const coincideLinea = (lineaSeleccionada === "Todos" || p.linea === lineaSeleccionada);
+        const coincideMedida = (medidaSeleccionada === "Todos" || p.medida === medidaSeleccionada);
+        
+        const stringFiltro = `${p.categoria} ${p.linea} ${p.sistema} ${p.detalle} ${p.medida} ${p.variante}`.toLowerCase();
+        const palabras = textoBusqueda.split(' ');
+        const coincideBusqueda = palabras.every(palabra => stringFiltro.includes(palabra));
+
+        return coincideCategoria && coincideLinea && coincideMedida && coincideBusqueda;
+      });
+
+      contador.textContent = `Productos encontrados: ${productosFiltrados.length}`;
+
+      if (productosFiltrados.length === 0) {
+        contenedorPrincipal.style.display = "block";
+        contenedorPrincipal.innerHTML = `<div class="no-results">No se encontraron aberturas con esa combinación de filtros.</div>`;
+        return;
+      }
+
+      if (vistaActiva === "grid") {
+        contenedorPrincipal.className = "grid-productos";
+        contenedorPrincipal.style.display = "grid";
+
+        productosFiltrados.forEach(p => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.innerHTML = `
+            <div class="card-header">
+              <div class="cat">${p.categoria}</div>
+              <div class="badge-medida-top">📏 ${p.medida}</div>
+            </div>
+            <div class="title">${p.linea}</div>
+            <div class="info-line"><span>Sistema:</span> ${p.sistema}</div>
+            <div class="info-line"><span>Detalle:</span> ${p.detalle}</div>
+            <div class="info-line"><span>Modelo:</span> ${p.variante}</div>
+            
+            <div class="price-container">
+              <span class="price-label">Precio:</span>
+              <div class="price-input-wrapper">
+                <span class="price-symbol">$</span>
+                <input type="number" class="price-input" data-id="${p.id}" value="${p.precio || ''}" placeholder="---">
+              </div>
+            </div>
+            <button class="btn-add-cart action-add" data-id="${p.id}">🛒 Agregar al presupuesto</button>
+          `;
+          contenedorPrincipal.appendChild(card);
+        });
+
+      } else if (vistaActiva === "tabla") {
+        contenedorPrincipal.className = ""; 
+        contenedorPrincipal.style.display = "block";
+
+        const wrapperTabla = document.createElement('div');
+        wrapperTabla.className = 'tabla-contenedor';
+
+        let bodyHTML = '';
+        productosFiltrados.forEach(p => {
+          bodyHTML += `
+            <tr>
+              <td><strong style="color: var(--accent); font-size: 0.8rem; text-transform: uppercase;">${p.categoria}</strong></td>
+              <td><strong>${p.linea}</strong></td>
+              <td>${p.sistema}</td>
+              <td>${p.detalle}</td>
+              <td>${p.variante}</td>
+              <td><span class="badge-medida-top">📏 ${p.medida}</span></td>
+              <td>
+                <div class="tabla-price-wrapper">
+                  <span class="price-symbol" style="left:8px; font-size:0.95rem;">$</span>
+                  <input type="number" class="price-input tabla-price-input" data-id="${p.id}" value="${p.precio || ''}" placeholder="---">
+                </div>
+              </td>
+              <td>
+                <button class="tabla-btn-add action-add" data-id="${p.id}">🛒</button>
+              </td>
+            </tr>
+          `;
+        });
+
+        wrapperTabla.innerHTML = `
+          <table class="tabla-productos">
+            <thead>
+              <tr>
+                <th>Categoría</th>
+                <th>Línea</th>
+                <th>Sistema</th>
+                <th>Detalle</th>
+                <th>Modelo / Variante</th>
+                <th>Medida</th>
+                <th>Precio Actualizable</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${bodyHTML}
+            </tbody>
+          </table>
+        `;
+        contenedorPrincipal.appendChild(wrapperTabla);
+      }
+    }
+
+    // Escuchador de cambios en los inputs de precios base
+    contenedorPrincipal.addEventListener('input', (e) => {
+      if (e.target.classList.contains('price-input')) {
+        const prodId = e.target.getAttribute('data-id');
+        const nuevoPrecio = e.target.value;
+        
+        const producto = listadoProductos.find(p => p.id === prodId);
+        if (producto) {
+          producto.precio = nuevoPrecio;
+        }
+        localStorage.setItem(`precio-${prodId}`, nuevoPrecio);
+        
+        const itemEnCarrito = carrito.find(item => item.id === prodId);
+        if (itemEnCarrito) {
+          itemEnCarrito.precio = nuevoPrecio;
+          actualizarCarritoUI();
+        }
+      }
+    });
+
+    contenedorPrincipal.addEventListener('click', (e) => {
+      const btn = e.target.closest('.action-add');
+      if (btn) {
+        const prodId = btn.getAttribute('data-id');
+        agregarAlCarrito(prodId);
+      }
+    });
+
+    function agregarAlCarrito(id) {
+      const prodOriginal = listadoProductos.find(p => p.id === id);
+      if (!prodOriginal) return;
+
+      const itemExistente = carrito.find(item => item.id === id);
+
+      if (itemExistente) {
+        itemExistente.cantidad += 1;
+      } else {
+        carrito.push({
+          id: prodOriginal.id,
+          categoria: prodOriginal.categoria,
+          linea: prodOriginal.linea,
+          sistema: prodOriginal.sistema,
+          detalle: prodOriginal.detalle,
+          variante: prodOriginal.variante,
+          medida: prodOriginal.medida,
+          precio: prodOriginal.precio || 0, 
+          cantidad: 1
+        });
+      }
+      actualizarCarritoUI();
+      
+      cartCount.style.transform = "scale(1.3)";
+      setTimeout(() => cartCount.style.transform = "scale(1)", 200);
+    }
+
+    // CORE: ACTUALIZACIÓN INTERFAZ CARRITO Y DOBLE PRECIO VISUAL
+    function actualizarCarritoUI() {
+      cartItemsList.innerHTML = '';
+      let totalConDescuentoAcumulado = 0;
+      let totalUnidades = 0;
+      
+      // Capturamos el porcentaje de bonificación actual
+      const porcBonif = parseFloat(cartBonifInput.value) || 0;
+
+      carrito.forEach(item => {
+        const precioBase = Number(item.precio) || 0;
+        // Calculamos el precio unitario aplicando la bonificación
+        const precioConBonif = precioBase * (1 - (porcBonif / 100));
+        const subtotalItem = precioConBonif * item.cantidad;
+        
+        totalConDescuentoAcumulado += subtotalItem;
+        totalUnidades += item.cantidad;
+
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = `
+          <div class="cart-item-details">
+            <div class="cart-item-title">${item.categoria} - ${item.linea}</div>
+            <div class="cart-item-meta">${item.sistema} | ${item.variante} (${item.medida})</div>
+            <div class="cart-item-meta" style="color: #777; text-decoration: ${porcBonif > 0 ? 'line-through' : 'none'}">Unitario: $${precioBase.toLocaleString('es-AR')}</div>
+            ${porcBonif > 0 ? `<div class="cart-item-meta" style="color: var(--accent); font-weight: bold;">Unitario con Bonif.: $${precioConBonif.toLocaleString('es-AR')}</div>` : ''}
+          </div>
+          <div class="cart-item-controls">
+            <input type="number" class="qty-input" data-id="${item.id}" value="${item.cantidad}" min="1">
+            <button class="btn-remove-item" data-id="${item.id}">❌</button>
+          </div>
+        `;
+        cartItemsList.appendChild(div);
+      });
+
+      cartCount.textContent = totalUnidades;
+      cartTotalValue.textContent = `$${totalConDescuentoAcumulado.toLocaleString('es-AR')}`;
+    }
+
+    // Escuchar el porcentaje de bonificación para redibujar al vuelo
+    cartBonifInput.addEventListener('input', () => {
+      if(parseFloat(cartBonifInput.value) < 0) cartBonifInput.value = 0;
+      if(parseFloat(cartBonifInput.value) > 100) cartBonifInput.value = 100;
+      actualizarCarritoUI();
+    });
+
+    cartItemsList.addEventListener('input', (e) => {
+      if (e.target.classList.contains('qty-input')) {
+        const id = e.target.getAttribute('data-id');
+        const nuevaCant = parseInt(e.target.value) || 1;
+        const item = carrito.find(i => i.id !== id);
+        const itemAModificar = carrito.find(i => i.id === id);
+        if (itemAModificar) {
+          itemAModificar.cantidad = nuevaCant;
+          actualizarCarritoUI();
+        }
+      }
+    });
+
+    cartItemsList.addEventListener('click', (e) => {
+      if (e.target.classList.contains('btn-remove-item')) {
+        const id = e.target.getAttribute('data-id');
+        carrito = carrito.filter(i => i.id !== id);
+        actualizarCarritoUI();
+      }
+    });
+
+    floatingCartBtn.addEventListener('click', () => cartSidebar.classList.add('open'));
+    cartCloseBtn.addEventListener('click', () => cartSidebar.classList.remove('open'));
+
+    // PROCESAMIENTO Y ARMADO DEL PRESUPUESTO OFICIAL DESGLOSADO
+    btnOpenBudget.addEventListener('click', () => {
+      if (carrito.length === 0) {
+        alert("El carrito está vacío. Agregá aberturas antes de presupuestar.");
+        return;
+      }
+      
+      const hoy = new Date();
+      printDate.textContent = `Fecha: ${hoy.getDate()}/${hoy.getMonth() + 1}/${hoy.getFullYear()}`;
+      
+      printTableBody.innerHTML = '';
+      let sumaTotalLista = 0;
+      const porcBonif = parseFloat(cartBonifInput.value) || 0;
+
+      carrito.forEach(item => {
+        const precioBase = Number(item.precio) || 0;
+        const precioConBonif = precioBase * (1 - (porcBonif / 100));
+        const subtotalConBonif = precioConBonif * item.cantidad;
+        
+        sumaTotalLista += (precioBase * item.cantidad);
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td><strong>${item.cantidad}</strong></td>
+          <td>
+            <div style="font-weight: 600; color: var(--primary);">${item.categoria} ${item.linea}</div>
+            <div style="font-size: 0.8rem; color:#666;">${item.sistema} — ${item.detalle} / ${item.variante}</div>
+          </td>
+          <td><span style="font-size:0.85rem; font-weight:bold;">${item.medida}</span></td>
+          <td>
+            ${porcBonif > 0 ? `<span style="font-size:0.8rem; color:#999; text-decoration:line-through; display:block;">$${precioBase.toLocaleString('es-AR')}</span>` : ''}
+            <strong style="color: var(--accent); font-size:0.95rem;">$${precioConBonif.toLocaleString('es-AR')}</strong>
+          </td>
+          <td><strong>$${subtotalConBonif.toLocaleString('es-AR')}</strong></td>
+        `;
+        printTableBody.appendChild(row);
+      });
+
+      // Cálculos del cuadro final de resumen
+      const descuentoTotalEfectivo = sumaTotalLista * (porcBonif / 100);
+      const totalFinalNeto = sumaTotalLista - descuentoTotalEfectivo;
+
+      printSubtotalValue.textContent = `$${sumaTotalLista.toLocaleString('es-AR')}`;
+      printBonifPercentage.textContent = porcBonif;
+      printDiscountValue.textContent = `-$${descuentoTotalEfectivo.toLocaleString('es-AR')}`;
+      printTotalValue.textContent = `TOTAL FINAL NETO: $${totalFinalNeto.toLocaleString('es-AR')}`;
+      
+      modalBudget.classList.add('open');
+    });
+
+    btnCloseBudgetModal.addEventListener('click', () => modalBudget.classList.remove('open'));
+    btnPrintNow.addEventListener('click', () => window.print());
+
+    // Switchers de vistas tradicionales
+    btnViewGrid.addEventListener('click', () => {
+      vistaActiva = "grid";
+      btnViewGrid.classList.add('active');
+      btnViewTable.classList.remove('active');
+      renderizarProductos();
+    });
+
+    btnViewTable.addEventListener('click', () => {
+      vistaActiva = "tabla";
+      btnViewTable.classList.add('active');
+      btnViewGrid.classList.remove('active');
+      renderizarProductos();
+    });
+
+    buscador.addEventListener('input', renderizarProductos);
+    selectLinea.addEventListener('change', renderizarProductos);
+    selectMedida.addEventListener('change', renderizarProductos);
+
+    contenedorFiltros.addEventListener('click', (e) => {
+      if (e.target.classList.contains('filter-btn')) {
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+        e.target.classList.add('active');
+        categoriaSeleccionada = e.target.getAttribute('data-cat');
+        
+        actualizarDesplegables();
+        renderizarProductos();
+      }
+    });
+
+    btnLimpiar.addEventListener('click', () => {
+      buscador.value = "";
+      categoriaSeleccionada = "Todos";
+      document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+      document.querySelector('[data-cat="Todos"]').classList.add('active');
+      
+      actualizarDesplegables();
+      selectLinea.value = "Todos";
+      selectMedida.value = "Todos";
+      renderizarProductos();
+    });
+
+    // Carga inicial
+    actualizarDesplegables();
+    renderizarProductos();
+  </script>
+</body>
+</html>
