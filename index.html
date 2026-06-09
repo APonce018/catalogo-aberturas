@@ -6,19 +6,18 @@
   <title>Catálogo Técnico y Presupuestador - Fábrica de Aberturas</title>
   <style>
     :root {
-      /* Paleta Pastel Soft UI */
-      --bg: #fdfaf7; 
-      --card-bg: rgba(255, 255, 255, 0.75); 
-      --text: #2c3e50; 
-      --primary: #2c3e50;
-      --accent: #1abc9c;
-      --danger: #e74c3c;
+      /* Nueva Paleta Pastel inspirada en image_8.png */
+      --bg: #fdfaf7; /* Un fondo cálido y muy suave */
+      --card-bg: rgba(255, 255, 255, 0.75); /* Base para el efecto vidrio */
+      --text: #2c3e50; /* Texto oscuro y nítido */
       
-      /* Gradientes suaves */
-      --gradient-a: linear-gradient(135deg, #FF9EBE 0%, #D8BFD8 100%); 
-      --gradient-b: linear-gradient(135deg, #a2d2ff 0%, #d8bfd8 100%); 
-      --gradient-accent: linear-gradient(135deg, #16a085 0%, #1abc9c 100%); 
-      --blur-effect: blur(10px); 
+      /* Gradientes suaves y pastel para acentos */
+      --gradient-a: linear-gradient(135deg, #FF9EBE 0%, #D8BFD8 100%); /* Rosa pastel a Lavanda */
+      --gradient-b: linear-gradient(135deg, #a2d2ff 0%, #d8bfd8 100%); /* Azul suave a Lavanda */
+      --gradient-accent: linear-gradient(135deg, #16a085 0%, #1abc9c 100%); /* Tu verde acento adaptado */
+      
+      --danger: #e74c3c;
+      --blur-effect: blur(10px); /* El efecto de desenfoque de vidrio */
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
@@ -34,6 +33,7 @@
     .search-box:focus { border-color: #D8BFD8; outline: none; box-shadow: inset 0 2px 4px rgba(0,0,0,0.03), 0 0 10px rgba(216, 191, 216, 0.4); }
 
     .category-filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 5px; }
+    /* Botones Súper Redondeados y sin emojis */
     .filter-btn { padding: 10px 22px; background: #eaeded; border: none; border-radius: 50px; cursor: pointer; font-weight: 700; color: #7f8c8d; transition: all 0.3s; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; border: 1px solid transparent; }
     .filter-btn.active, .filter-btn:hover { background: var(--gradient-a); color: white; box-shadow: 0 4px 15px rgba(216, 191, 216, 0.4); border-color: rgba(255,255,255,0.4); }
 
@@ -42,7 +42,7 @@
     .filter-group label { font-size: 0.8rem; font-weight: bold; color: #7f8c8d; text-transform: uppercase; letter-spacing: 1px; }
     .filter-select { padding: 12px; border: 1px solid rgba(0,0,0,0.06); border-radius: 10px; background: rgba(255,255,255,0.6); font-size: 0.95rem; cursor: pointer; color: var(--text); outline: none; }
 
-    /* FILA DE CONTROLES */
+    /* FILA DE CONTROLES (Contador y Switcher minimalistao) */
     .controls-row { max-width: 1200px; margin: 0 auto 15px auto; display: flex; justify-content: space-between; align-items: center; gap: 10px; z-index: 10; position: relative; }
     .results-counter { font-weight: 700; color: #7f8c8d; font-size: 0.9rem; }
     .reset-link { color: #FF9EBE; cursor: pointer; text-decoration: underline; font-size: 0.85rem; font-weight: bold; margin-left: 10px; }
@@ -51,15 +51,17 @@
     .view-btn { padding: 7px 18px; border: none; background: transparent; font-weight: 700; color: #7f8c8d; border-radius: 50px; cursor: pointer; transition: all 0.2s; font-size: 0.8rem; text-transform: uppercase; }
     .view-btn.active { background: white; color: var(--text); box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
 
-    /* --- CONTENEDOR PRINCIPAL DINÁMICO --- */
+    /* --- CONTENEDOR PRINCIPAL DINÁMICO (Gradients) --- */
     .grid-productos { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; z-index: 10; position: relative; }
     
-    /* --- VISTA TARJETAS --- */
+    /* --- VISTA TARJETAS (NUEVO DISEÑO SUAVE Y FLOTANTE) --- */
     .card { background: var(--card-bg); border-radius: 20px; padding: 25px; border: 1px solid rgba(255,255,255,0.4); box-shadow: 0 10px 30px rgba(0,0,0,0.03); transition: all 0.3s ease-in-out; display: flex; flex-direction: column; backdrop-filter: var(--blur-effect); position: relative; overflow: hidden; }
+    /* Gradiente pastel de fondo solo visible al hover */
     .card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--gradient-b); opacity: 0; transition: opacity 0.3s; z-index: 1; }
-    .card:hover { transform: translateY(-5px); box-shadow: 0 15px 45px rgba(0,0,0,0.07); }
-    .card:hover::before { opacity: 0.05; }
-    .card > * { position: relative; z-index: 2; }
+    .card:hover { transform: translateY(-8px); box-shadow: 0 15px 45px rgba(0,0,0,0.07); }
+    .card:hover::before { opacity: 0.05; } /* Un efecto muy sutil de fondo */
+
+    .card > * { position: relative; z-index: 2; } /* Aseguramos que el contenido esté sobre el pseudoelemento */
 
     .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; gap: 10px; }
     .card .cat { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #D8BFD8; letter-spacing: 1px; }
@@ -74,13 +76,15 @@
     .price-symbol { position: absolute; left: 10px; font-weight: bold; color: #1abc9c; font-size: 1.1rem; }
     .price-input { width: 100%; padding: 10px 10px 10px 28px; border: 1px solid rgba(0,0,0,0.06); border-radius: 10px; font-weight: 800; color: #1abc9c; font-size: 1.1rem; outline: none; transition: all 0.2s; background: rgba(255,255,255,0.6); }
     .price-input:focus { border-color: #1abc9c; background-color: #faffff; }
+    /* Quitar las flechitas por defecto de los inputs de tipo número */
     .price-input::-webkit-outer-spin-button, .price-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
     .price-input { -moz-appearance: textfield; }
 
+    /* Botón Agregar (Súper Redondeado y Gradient) */
     .btn-add-cart { width: 100%; padding: 12px; background: var(--gradient-accent); color: white; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; transition: all 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 0.9rem; }
     .btn-add-cart:hover { box-shadow: 0 4px 15px rgba(26, 188, 156, 0.3); }
 
-    /* --- VISTA TABLA --- */
+    /* --- VISTA TABLA (Soft UI Planilla) --- */
     .tabla-contenedor { width: 100%; overflow-x: auto; background: var(--card-bg); border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); border: 1px solid rgba(255,255,255,0.4); backdrop-filter: var(--blur-effect); }
     .tabla-productos { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
     .tabla-productos th { background: #fdfaf7; color: #7f8c8d; padding: 15px; font-weight: bold; border-bottom: 2px solid rgba(0,0,0,0.04); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; }
@@ -91,9 +95,11 @@
     .tabla-price-wrapper { display: flex; align-items: center; position: relative; width: 130px; }
     .tabla-price-input { width: 100%; padding: 7px 7px 7px 22px; border: 1px solid rgba(0,0,0,0.06); border-radius: 8px; font-weight: 800; color: #1abc9c; outline: none; background: rgba(255,255,255,0.6); }
     .tabla-btn-add { padding: 7px 14px; background: var(--gradient-accent); color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; font-size: 0.9rem; }
+    .tabla-btn-add:hover { box-shadow: 0 4px 10px rgba(26, 188, 156, 0.2); }
 
-    /* --- INTERFAZ CARRITO / PRESUPUESTO --- */
-    .cart-float-btn { position: fixed; bottom: 25px; right: 25px; background: var(--gradient-accent); color: white; border: none; padding: 16px 24px; border-radius: 50px; font-size: 1rem; font-weight: bold; cursor: pointer; box-shadow: 0 10px 25px rgba(26, 188, 156, 0.3); display: flex; align-items: center; gap: 10px; z-index: 999; transition: transform 0.2s; }
+    /* --- INTERFAZ CARRITO / PRESUPUESTO (Soft UI) --- */
+    /* Botón flotante sin emoji */
+    .cart-float-btn { position: fixed; bottom: 25px; right: 25px; background: var(--gradient-accent); color: white; border: none; padding: 16px 24px; border-radius: 50px; font-size: 1rem; font-weight: bold; cursor: pointer; box-shadow: 0 10px 25px rgba(26, 188, 156, 0.3); display: flex; align-items: center; gap: 10px; z-index: 999; transition: transform 0.2s; text-transform: uppercase; letter-spacing: 1px; }
     .cart-float-btn:hover { transform: scale(1.05); }
     .cart-badge { background: white; color: #1abc9c; padding: 3px 9px; border-radius: 12px; font-size: 0.85rem; font-weight: 900; }
 
@@ -111,25 +117,29 @@
     
     .cart-item-controls { display: flex; align-items: center; gap: 8px; }
     .qty-input { width: 50px; padding: 6px; text-align: center; border: 1px solid rgba(0,0,0,0.06); border-radius: 6px; font-weight: bold; background: rgba(255,255,255,0.6); color: var(--text); }
-    .btn-remove-item { background: transparent; border: none; color: var(--danger); font-weight: bold; cursor: pointer; padding: 4px; font-size: 1.1rem; }
+    /* Reemplazo de ❌ por símbolo &times; */
+    .btn-remove-item { background: transparent; border: none; color: var(--danger); font-weight: bold; cursor: pointer; padding: 4px; font-size: 1.5rem; line-height: 1; }
     
     .cart-footer { padding: 25px; background: #fdfaf7; border-top: 1px solid rgba(0,0,0,0.04); border-radius: 0 0 0 18px; }
+    /* Campo de Bonificación minimalistao */
     .bonif-container { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.6); padding: 12px 16px; border-radius: 10px; border: 1px dashed #D8BFD8; margin-bottom: 15px; }
     .bonif-label { font-weight: bold; font-size: 0.85rem; color: #7f8c8d; text-transform: uppercase; letter-spacing: 1px; }
     .bonif-input-wrapper { display: flex; align-items: center; gap: 5px; }
-    .bonif-input { width: 70px; padding: 7px; border: 1px solid rgba(0,0,0,0.06); border-radius: 6px; font-weight: bold; text-align: center; color: #7f8c8d; font-size: 1.1rem; background: rgba(255,255,255,0.6); }
+    .bonif-input { width: 70px; padding: 7px; border: 1px solid rgba(0,0,0,0.06); border-radius: 6px; font-weight: bold; text-align: center; color: #D8BFD8; font-size: 1.1rem; background: rgba(255,255,255,0.6); }
 
     .cart-total-row { display: flex; justify-content: space-between; font-size: 1.3rem; font-weight: 800; color: var(--text); margin-bottom: 18px; letter-spacing: -0.5px; }
     .btn-generate-budget { width: 100%; padding: 14px; background: var(--gradient-b); color: white; border: none; border-radius: 50px; font-size: 1rem; font-weight: 800; cursor: pointer; transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px; }
     .btn-generate-budget:hover { box-shadow: 0 4px 15px rgba(216, 191, 216, 0.3); }
 
-    /* --- MODAL IMPRESIÓN PRESUPUESTO --- */
+    /* --- MODAL IMPRESIÓN PRESUPUESTO OFICIAL (Clean UI) --- */
     .modal-budget { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 2000; display: none; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(5px); }
     .modal-budget.open { display: flex; }
     .modal-budget-content { background: white; width: 100%; max-width: 850px; max-height: 90vh; border-radius: 20px; display: flex; flex-direction: column; box-shadow: 0 15px 45px rgba(0,0,0,0.15); overflow: hidden; }
     .modal-budget-actions { padding: 18px 25px; background: #eaeded; border-bottom: 1px solid rgba(0,0,0,0.04); display: flex; justify-content: space-between; align-items: center; }
     .modal-budget-actions > span { font-weight: bold; color: #7f8c8d; font-size: 0.9rem; }
+    /* Botones minimalistao */
     .btn-print { padding: 10px 24px; background: var(--gradient-accent); color: white; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; transition: all 0.2s; }
+    .btn-print:hover { box-shadow: 0 4px 10px rgba(26, 188, 156, 0.3); }
     .btn-close-budget { padding: 10px 20px; background: #95a5a6; color: white; border: none; border-radius: 50px; cursor: pointer; margin-left: 10px; font-weight: bold; }
     
     .print-area { padding: 45px; flex: 1; overflow-y: auto; background: white; color: #333; }
@@ -143,6 +153,7 @@
     .print-table { width: 100%; border-collapse: collapse; margin-top: 25px; margin-bottom: 25px; font-size: 0.85rem; }
     .print-table th { border-bottom: 2px solid #555; padding: 12px; text-align: left; background: #fdfaf7; color: #333; }
     .print-table td { padding: 12px; border-bottom: 1px solid rgba(0,0,0,0.03); vertical-align: middle; }
+    .print-table tr:hover td { background-color: transparent; } /* Desactivar hover en impresión modal */
     
     .print-summary-box { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; padding-top: 20px; border-top: 3px solid var(--text); margin-top: 15px; }
     .print-summary-line { font-size: 1rem; color: #555; }
@@ -151,6 +162,7 @@
 
     .no-results { grid-column: 1 / -1; text-align: center; padding: 30px 0; color: #888; font-size: 1.2rem; background: rgba(255,255,255,0.6); border-radius: 12px; border: 1px dashed rgba(0,0,0,0.06); margin: 20px 0; }
 
+    /* --- AJUSTES EXCLUSIVOS PARA IMPRESIÓN EN PAPEL/PDF --- */
     @media print {
       body { padding: 0; background: white; }
       body * { visibility: hidden; }
@@ -171,7 +183,7 @@
   </header>
 
   <div class="search-container">
-    <input type="text" id="buscador" class="search-box" placeholder="🔍 Escribí para buscar... Ej: 'Ventana 1200x1160', 'Puerta', 'Portón'...">
+    <input type="text" id="buscador" class="search-box" placeholder="Buscar... Ej: Ventana 1200x1160, Puerta, Portón">
     
     <div class="category-filters" id="contenedor-filtros">
       <button class="filter-btn active" data-cat="Todos">Todos los Productos</button>
@@ -179,16 +191,16 @@
 
     <div class="advanced-filters">
       <div class="filter-group">
-        <label for="select-linea">Filtrar por Línea</label>
+        <label for="select-linea">Línea</label>
         <select id="select-linea" class="filter-select">
-          <option value="Todos">Todas las líneas</option>
+          <option value="Todos">Todas</option>
         </select>
       </div>
 
       <div class="filter-group">
-        <label for="select-medida">Filtrar por Medida</label>
+        <label for="select-medida">Medida</label>
         <select id="select-medida" class="filter-select">
-          <option value="Todos">Todas las medidas</option>
+          <option value="Todos">Todas</option>
         </select>
       </div>
     </div>
@@ -197,19 +209,19 @@
   <div class="controls-row">
     <div class="results-counter">
       <span id="contador">Productos listados: 0</span>
-      <span id="btn-limpiar" class="reset-link" style="display:none;">Limpiar todos los filtros</span>
+      <span id="btn-limpiar" class="reset-link" style="display:none;">(Limpiar filtros)</span>
     </div>
     
     <div class="view-switcher">
-      <button id="btn-view-grid" class="view-btn active">📱 Tarjetas</button>
-      <button id="btn-view-table" class="view-btn">📊 Tabla</button>
+      <button id="btn-view-grid" class="view-btn active">Tarjetas</button>
+      <button id="btn-view-table" class="view-btn">Tabla</button>
     </div>
   </div>
 
   <main id="contenedor-principal" class="grid-productos"></main>
 
   <button id="floating-cart-btn" class="cart-float-btn">
-    🛒 Mi Carrito <span id="cart-count" class="cart-badge">0</span>
+    Presupuesto <span id="cart-count" class="cart-badge">0</span>
   </button>
 
   <div id="cart-sidebar" class="cart-sidebar">
@@ -220,10 +232,9 @@
     <div id="cart-items-list" class="cart-items-list"></div>
     <div class="cart-footer">
       <div class="bonif-container">
-        <span class="bonif-label">🏷️ Bonificación Cliente:</span>
+        <span class="bonif-label">Bonificación (%):</span>
         <div class="bonif-input-wrapper">
           <input type="number" id="cart-bonif-input" class="bonif-input" value="0" min="0" max="100">
-          <strong style="color: var(--accent);">%</strong>
         </div>
       </div>
 
@@ -231,16 +242,16 @@
         <span>Total Neto:</span>
         <span id="cart-total-value">$0</span>
       </div>
-      <button id="btn-open-budget" class="btn-generate-budget">📄 Generar Presupuesto</button>
+      <button id="btn-open-budget" class="btn-generate-budget">📄 Generar Documento</button>
     </div>
   </div>
 
   <div id="modal-budget" class="modal-budget">
     <div class="modal-budget-content">
       <div class="modal-budget-actions">
-        <span>📄 Vista Previa de Cotización de Obra</span>
+        <span>Presupuesto de Obra</span>
         <div>
-          <button id="btn-print-now" class="btn-print">🖨️ Imprimir / Guardar PDF</button>
+          <button id="btn-print-now" class="btn-print">Imprimir / Guardar PDF</button>
           <button id="btn-close-budget-modal" class="btn-close-budget">Cerrar</button>
         </div>
       </div>
@@ -248,11 +259,10 @@
         <div class="print-header">
           <div class="print-company-info">
             <h2>FÁBRICA DE ABERTURAS</h2>
-            <p>Sección Presupuestos y Cotizaciones Comerciales</p>
-            <p>Documento Técnico de Validez Regular</p>
+            <p>Cotizaciones Comerciales - Validez Regular</p>
           </div>
           <div class="print-budget-title">
-            <h3>Presupuesto de Obra</h3>
+            <h3>Presupuesto</h3>
             <p id="print-date">Fecha: --/--/----</p>
           </div>
         </div>
@@ -261,7 +271,7 @@
           <thead>
             <tr>
               <th style="width: 80px;">Cant.</th>
-              <th>Descripción Detallada de la Abertura</th>
+              <th>Abertura / Descripción Detallada</th>
               <th style="width: 120px;">Medida</th>
               <th style="width: 150px;">Precio Unit. (Neto)</th>
               <th style="width: 130px;">Subtotal</th>
@@ -272,12 +282,12 @@
 
         <div class="print-summary-box">
           <div class="print-summary-line">Suma Total Lista: <span id="print-subtotal-value">$0</span></div>
-          <div class="print-summary-line" style="color: var(--danger); font-weight: 500;">Bonificación Aplicada (<span id="print-bonif-percentage">0</span>%): <span id="print-discount-value">-$0</span></div>
-          <div id="print-total-value" class="print-total">TOTAL FINAL: $0</div>
+          <div class="print-summary-line" style="color: var(--danger); font-weight: 500;">Bonificación (<span id="print-bonif-percentage">0</span>%): <span id="print-discount-value">-$0</span></div>
+          <div id="print-total-value" class="print-total">TOTAL FINAL NETO: $0</div>
         </div>
 
         <div class="print-conditions">
-          <p><strong>Condiciones Generales:</strong> Precios sujetos a variaciones de insumos de fábrica sin previo aviso. Plazos de entrega a coordinar con la sección técnica una vez formalizado el pago.</p>
+          <p><strong>Condiciones Generales:</strong> Precios sujetos a variaciones de insumos sin previo aviso. Plazos de entrega a coordinar.</p>
         </div>
       </div>
     </div>
@@ -328,7 +338,7 @@
       }
     });
 
-    // Inyectar Categorías dinámicamente
+    // Inyectar Categorías dinámicamente sin emojis
     const categorias = [...new Set(listadoProductos.map(p => p.categoria))];
     categorias.forEach(cat => {
       const btn = document.createElement('button');
@@ -342,8 +352,8 @@
       const lineaPrevia = selectLinea.value;
       const medidaPrevia = selectMedida.value;
 
-      selectLinea.innerHTML = '<option value="Todos">Todas las líneas</option>';
-      selectMedida.innerHTML = '<option value="Todos">Todas las medidas</option>';
+      selectLinea.innerHTML = '<option value="Todos">Todas</option>';
+      selectMedida.innerHTML = '<option value="Todos">Todas</option>';
 
       const productosDeCategoria = listadoProductos.filter(p => {
         return categoriaSeleccionada === "Todos" || p.categoria === categoriaSeleccionada;
@@ -399,7 +409,7 @@
 
       if (productosFiltrados.length === 0) {
         contenedorPrincipal.style.display = "block";
-        contenedorPrincipal.innerHTML = `<div class="no-results">No se encontraron aberturas con esa combinación de filtros.</div>`;
+        contenedorPrincipal.innerHTML = `<div class="no-results">No se encontraron aberturas.</div>`;
         return;
       }
 
@@ -413,7 +423,7 @@
           card.innerHTML = `
             <div class="card-header">
               <div class="cat">${p.categoria}</div>
-              <div class="badge-medida-top">📏 ${p.medida}</div>
+              <div class="badge-medida-top">Medida: ${p.medida}</div>
             </div>
             <div class="title">${p.linea}</div>
             <div class="info-line"><span>Sistema:</span> ${p.sistema}</div>
@@ -427,7 +437,7 @@
                 <input type="number" class="price-input" data-id="${p.id}" value="${p.precio || ''}" placeholder="---">
               </div>
             </div>
-            <button class="btn-add-cart action-add" data-id="${p.id}">🛒 Agregar al presupuesto</button>
+            <button class="btn-add-cart action-add" data-id="${p.id}">Agregar al presupuesto</button>
           `;
           contenedorPrincipal.appendChild(card);
         });
@@ -443,12 +453,12 @@
         productosFiltrados.forEach(p => {
           bodyHTML += `
             <tr>
-              <td><strong style="color: var(--accent); font-size: 0.8rem; text-transform: uppercase;">${p.categoria}</strong></td>
+              <td><strong style="color: var(--gradient-accent); font-size: 0.8rem; text-transform: uppercase;">${p.categoria}</strong></td>
               <td><strong>${p.linea}</strong></td>
               <td>${p.sistema}</td>
               <td>${p.detalle}</td>
               <td>${p.variante}</td>
-              <td><span class="badge-medida-top">📏 ${p.medida}</span></td>
+              <td><span class="badge-medida-top">M: ${p.medida}</span></td>
               <td>
                 <div class="tabla-price-wrapper">
                   <span class="price-symbol" style="left:8px; font-size:0.95rem;">$</span>
@@ -456,7 +466,7 @@
                 </div>
               </td>
               <td>
-                <button class="tabla-btn-add action-add" data-id="${p.id}">🛒</button>
+                <button class="tabla-btn-add action-add" data-id="${p.id}">+</button>
               </td>
             </tr>
           `;
@@ -470,9 +480,9 @@
                 <th>Línea</th>
                 <th>Sistema</th>
                 <th>Detalle</th>
-                <th>Modelo / Variante</th>
+                <th>Modelo</th>
                 <th>Medida</th>
-                <th>Precio Actualizable</th>
+                <th>Precio Unit.</th>
                 <th>Acción</th>
               </tr>
             </thead>
@@ -529,7 +539,7 @@
         cartElement.innerHTML = `
           <div class="cart-item-details">
             <div class="cart-item-title">${item.linea} (${item.medida})</div>
-            <div class="cart-item-meta">${item.sistema} - Unitario: ${displayPrecioUnitario}</div>
+            <div class="cart-item-meta">${item.sistema} - P. Unit: ${displayPrecioUnitario}</div>
           </div>
           <div class="cart-item-controls">
             <input type="number" class="qty-input" data-id="${item.id}" value="${item.cantidad}" min="1">
@@ -622,7 +632,7 @@
     selectMedida.addEventListener('change', renderizarProductos);
     buscador.addEventListener('input', renderizarProductos);
 
-    // Botón para resetear todos los filtros aplicados
+    // Botón para resetear todos los filtros aplicados (sin emoji)
     btnLimpiar.addEventListener('click', () => {
       buscador.value = '';
       categoriaSeleccionada = "Todos";
@@ -634,7 +644,7 @@
       renderizarProductos();
     });
 
-    // Alternador de vistas de Layout (Tarjetas / Planilla)
+    // Alternador de vistas de Layout (Tarjetas / Planilla) - Sin emojis
     btnViewGrid.addEventListener('click', () => {
       btnViewGrid.classList.add('active');
       btnViewTable.classList.remove('active');
@@ -649,10 +659,10 @@
       renderizarProductos();
     });
 
-    // --- LÓGICA DE IMPRESIÓN DE PRESUPUESTO ---
+    // --- LÓGICA DE IMPRESIÓN DE PRESUPUESTO --- Sin emojis
     btnOpenBudget.addEventListener('click', () => {
       if(carrito.length === 0) {
-        alert("El carrito está vacío. Agregá aberturas para cotizar.");
+        alert("El carrito está vacío.");
         return;
       }
 
@@ -682,7 +692,7 @@
       printSubtotalValue.textContent = `$${subtotalGeneral.toLocaleString('es-AR')}`;
       printBonifPercentage.textContent = porcentajeBonif;
       printDiscountValue.textContent = `-$${descuento.toLocaleString('es-AR')}`;
-      printTotalValue.textContent = `TOTAL FINAL: $${totalFinal.toLocaleString('es-AR')}`;
+      printTotalValue.textContent = `TOTAL FINAL NETO: $${totalFinal.toLocaleString('es-AR')}`;
       printDate.textContent = `Fecha: ${new Date().toLocaleDateString('es-AR')}`;
 
       modalBudget.classList.add('open');
