@@ -6,7 +6,7 @@
   <title>Catálogo Técnico y Presupuestador - Fábrica de Aberturas</title>
   <style>
     :root {
-      /* Nueva Paleta SAturada y Rica inspirada en image_11.png */
+      /* Nueva Paleta Saturada y Rica */
       --bg: #FFFFFF; /* Fondo blanco puro para máxima legibilidad */
       --card-bg: #FFFFFF; 
       --text: #333333; /* Texto oscuro y nítido para alta legibilidad */
@@ -14,7 +14,7 @@
       --accent: #1E908A; /* El Teal Saturado */
       --medida-capsule: #AF3795; /* El Naranja Quemado */
       
-      /* MAPEO DE COLORES DE LA PALETA image_11.png */
+      /* MAPEO DE COLORES DE LA PALETA */
       --ho-plum: #813563; 
       --ho-coral: #FA425A; 
       --ho-orange: #AF3795; 
@@ -32,24 +32,33 @@
     header h1 { color: #FFFFFF; margin-bottom: 5px; font-size: 2rem; font-weight: 800; letter-spacing: -1px; }
     header p { color: #fdfaf7; font-size: 0.9rem; }
 
-    /* --- BUSCADOR Y CONTENEDOR DE FILTROS --- */
-    .search-container { max-width: 1200px; margin: 0 auto 25px auto; background: var(--card-bg); padding: 25px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); backdrop-filter: var(--blur-effect); border: 1px solid rgba(129, 53, 99, 0.05); position: relative; z-index: 10; }
-    .search-box { width: 100%; padding: 18px; border: 1px solid rgba(129, 53, 99, 0.1); border-radius: 12px; font-size: 1.15rem; transition: all 0.3s; background: rgba(255, 255, 255, 0.6); color: var(--text); box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); }
-    .search-box:focus { border-color: var(--ho-yellow); outline: none; box-shadow: inset 0 2px 4px rgba(0,0,0,0.03), 0 0 10px rgba(246, 188, 89, 0.4); }
+    /* --- UNIFIED DISCOVERY PANEL (REDISEÑO DE FILTROS) --- */
+    .search-container { max-width: 1200px; margin: 0 auto 25px auto; background: var(--card-bg); padding: 30px; border-radius: 24px; box-shadow: 0 10px 40px rgba(129, 53, 99, 0.04); border: 1px solid rgba(129, 53, 99, 0.08); position: relative; z-index: 10; display: flex; flex-direction: column; gap: 20px; }
+    .search-box { width: 100%; padding: 18px; border: 1px solid rgba(129, 53, 99, 0.15); border-radius: 14px; font-size: 1.15rem; transition: all 0.3s; background: rgba(255, 255, 255, 0.8); color: var(--text); box-shadow: inset 0 2px 4px rgba(0,0,0,0.01); }
+    .search-box:focus { border-color: var(--accent); outline: none; box-shadow: inset 0 2px 4px rgba(0,0,0,0.01), 0 0 12px rgba(30, 144, 138, 0.2); }
 
-    .category-filters { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 5px; }
-    .filter-btn { padding: 10px 22px; background: #eaeded; border: none; border-radius: 50px; cursor: pointer; font-weight: 700; color: #7f8c8d; transition: all 0.3s; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; border: 1px solid transparent; }
-    .filter-btn.active, .filter-btn:hover { background: var(--accent); color: white; box-shadow: 0 4px 15px rgba(30, 144, 138, 0.3); border-color: rgba(255,255,255,0.4); }
+    .filter-section-title { font-size: 0.75rem; font-weight: 800; color: #95a5a6; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: -8px; }
+    .category-filters { display: flex; flex-wrap: wrap; gap: 10px; }
+    .filter-btn { padding: 10px 22px; background: #f2f4f4; border: none; border-radius: 50px; cursor: pointer; font-weight: 700; color: #7f8c8d; transition: all 0.3s; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; border: 1px solid transparent; }
+    .filter-btn.active, .filter-btn:hover { background: var(--accent); color: white; box-shadow: 0 4px 15px rgba(30, 144, 138, 0.25); border-color: rgba(255,255,255,0.2); }
 
-    .advanced-filters { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(0,0,0,0.06); }
-    .filter-group { display: flex; flex-direction: column; gap: 5px; min-width: 200px; flex: 1; }
-    .filter-group label { font-size: 0.8rem; font-weight: bold; color: #7f8c8d; text-transform: uppercase; letter-spacing: 1px; }
-    .filter-select { padding: 12px; border: 1px solid rgba(0,0,0,0.06); border-radius: 10px; background: rgba(255,255,255,0.6); font-size: 0.95rem; cursor: pointer; color: var(--text); outline: none; }
+    .advanced-filters { display: flex; flex-wrap: wrap; gap: 20px; padding-top: 10px; }
+    .filter-group { display: flex; flex-direction: column; gap: 8px; min-width: 220px; flex: 1; }
+    .filter-group label { font-size: 0.75rem; font-weight: 800; color: #7f8c8d; text-transform: uppercase; letter-spacing: 1px; }
+    .filter-select { padding: 14px; border: 1px solid rgba(129, 53, 99, 0.12); border-radius: 12px; background: #ffffff; font-size: 0.95rem; cursor: pointer; color: var(--text); outline: none; transition: all 0.2s; font-weight: 600; }
+    .filter-select:focus { border-color: var(--primary); box-shadow: 0 0 8px rgba(129, 53, 99, 0.15); }
 
-    /* FILA DE CONTROLES */
-    .controls-row { max-width: 1200px; margin: 0 auto 15px auto; display: flex; justify-content: space-between; align-items: center; gap: 10px; z-index: 10; position: relative; }
-    .results-counter { font-weight: 700; color: #7f8c8d; font-size: 0.9rem; }
-    .reset-link { color: var(--ho-orange); cursor: pointer; text-decoration: underline; font-size: 0.85rem; font-weight: bold; margin-left: 10px; }
+    /* CONTENEDOR DE FILTROS ACTIVOS (CHIPS) */
+    .active-chips-container { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 5px; }
+    .filter-chip { display: flex; align-items: center; gap: 6px; background: rgba(129, 53, 99, 0.08); color: var(--primary); padding: 6px 14px; border-radius: 50px; font-size: 0.8rem; font-weight: 700; border: 1px solid rgba(129, 53, 99, 0.12); animation: fadeIn 0.2s ease-out; }
+    .chip-remove { background: transparent; border: none; color: var(--ho-coral); font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center; line-height: 1; margin-left: 4px; font-weight: bold; }
+    .chip-remove:hover { color: var(--danger); transform: scale(1.1); }
+
+    /* FILA DE CONTROLES REUBICADOS */
+    .controls-row { max-width: 1200px; margin: 0 auto 20px auto; display: flex; justify-content: space-between; align-items: center; gap: 10px; z-index: 10; position: relative; padding: 0 5px; }
+    .results-counter { font-weight: 700; color: #7f8c8d; font-size: 0.9rem; display: flex; align-items: center; }
+    .reset-link { color: var(--ho-orange); cursor: pointer; text-decoration: underline; font-size: 0.85rem; font-weight: bold; margin-left: 12px; transition: color 0.2s; }
+    .reset-link:hover { color: var(--primary); }
     
     .view-switcher { display: flex; background: #eaeded; padding: 5px; border-radius: 50px; gap: 5px; }
     .view-btn { padding: 7px 18px; border: none; background: transparent; font-weight: 700; color: #7f8c8d; border-radius: 50px; cursor: pointer; transition: all 0.2s; font-size: 0.8rem; text-transform: uppercase; }
@@ -78,7 +87,6 @@
     .price-input::-webkit-outer-spin-button, .price-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
     .price-input { -moz-appearance: textfield; }
 
-    /* Botón Agregar usa acento (teal) */
     .btn-add-cart { width: 100%; padding: 12px; background: var(--accent); color: white; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; transition: all 0.2s; display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; }
     .btn-add-cart:hover { box-shadow: 0 4px 15px rgba(30, 144, 138, 0.3); }
 
@@ -94,15 +102,13 @@
     .tabla-price-input { width: 100%; padding: 7px 7px 7px 22px; border: 1px solid rgba(0,0,0,0.06); border-radius: 8px; font-weight: 800; color: var(--ho-coral); outline: none; background: rgba(255,255,255,0.6); }
     .tabla-btn-add { padding: 7px 14px; background: var(--accent); color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; font-size: 0.9rem; }
 
-    /* --- INTERFAZ CARRITO / PRESUPUESTO (Soft UI con nueva paleta) --- */
-    /* Botón flotante usa Teal */
+    /* --- INTERFAZ CARRITO / PRESUPUESTO --- */
     .cart-float-btn { position: fixed; bottom: 25px; right: 25px; background: var(--accent); color: white; border: none; padding: 16px 24px; border-radius: 50px; font-size: 1rem; font-weight: bold; cursor: pointer; box-shadow: 0 10px 25px rgba(30, 144, 138, 0.3); display: flex; align-items: center; gap: 10px; z-index: 999; transition: transform 0.2s; text-transform: uppercase; letter-spacing: 1px; }
     .cart-float-btn:hover { transform: scale(1.05); }
     .cart-badge { background: white; color: var(--accent); padding: 3px 9px; border-radius: 12px; font-size: 0.85rem; font-weight: 900; }
 
     .cart-sidebar { position: fixed; top: 10px; right: -420px; width: 400px; height: calc(100vh - 20px); background: var(--card-bg); box-shadow: -10px 0 30px rgba(0,0,0,0.05); z-index: 1000; transition: right 0.3s ease-out; display: flex; flex-direction: column; border-radius: 20px 0 0 20px; border: 1px solid rgba(129, 53, 99, 0.05); border-right: none; }
     .cart-sidebar.open { right: 10px; }
-    /* Header del carrito usa Púrpura Profundo */
     .cart-header { padding: 25px; background: var(--primary); color: white; display: flex; justify-content: space-between; align-items: center; border-radius: 18px 0 0 0; }
     .cart-header h2 { font-weight: 800; letter-spacing: -1px; font-size: 1.5rem; }
     .cart-close { background: transparent; border: none; color: white; font-size: 1.8rem; cursor: pointer; }
@@ -115,24 +121,20 @@
     
     .cart-item-controls { display: flex; align-items: center; gap: 8px; }
     .qty-input { width: 50px; padding: 6px; text-align: center; border: 1px solid rgba(129, 53, 99, 0.1); border-radius: 6px; font-weight: bold; background: rgba(255,255,255,0.6); color: var(--text); }
-    /* Reemplazo de emojis por símbolo &times; */
     .btn-remove-item { background: transparent; border: none; color: var(--danger); font-weight: bold; cursor: pointer; padding: 4px; font-size: 1.5rem; line-height: 1; }
     
     .cart-footer { padding: 25px; background: var(--bg); border-top: 1px solid rgba(0,0,0,0.04); border-radius: 0 0 0 18px; }
-    /* Campo de Bonificación usa borde naranja */
     .bonif-container { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.6); padding: 12px 16px; border-radius: 10px; border: 1px dashed var(--ho-orange); margin-bottom: 15px; }
     .bonif-label { font-weight: bold; font-size: 0.85rem; color: #7f8c8d; text-transform: uppercase; letter-spacing: 1px; }
     .bonif-input-wrapper { display: flex; align-items: center; gap: 5px; }
     .bonif-input { width: 70px; padding: 7px; border: 1px solid rgba(129, 53, 99, 0.1); border-radius: 6px; font-weight: bold; text-align: center; color: var(--text); font-size: 1.1rem; background: rgba(255,255,255,0.6); }
 
-    /* Total Neto resaltado en Coral */
     .cart-total-row { display: flex; justify-content: space-between; font-size: 1.3rem; font-weight: 800; color: var(--ho-coral); margin-bottom: 18px; letter-spacing: -0.5px; }
     
-    /* Botón Generar usa Teal */
     .btn-generate-budget { width: 100%; padding: 14px; background: var(--accent); color: white; border: none; border-radius: 50px; font-size: 1rem; font-weight: 800; cursor: pointer; transition: all 0.2s; text-transform: uppercase; letter-spacing: 1px; }
     .btn-generate-budget:hover { box-shadow: 0 4px 15px rgba(30, 144, 138, 0.3); }
 
-    /* --- MODAL IMPRESIÓN PRESUPUESTO OFICIAL (Clean UI) --- */
+    /* --- MODAL IMPRESIÓN PRESUPUESTO OFICIAL --- */
     .modal-budget { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 2000; display: none; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(5px); }
     .modal-budget.open { display: flex; }
     .modal-budget-content { background: white; width: 100%; max-width: 850px; max-height: 90vh; border-radius: 20px; display: flex; flex-direction: column; box-shadow: 0 15px 45px rgba(0,0,0,0.15); overflow: hidden; }
@@ -153,16 +155,20 @@
     .print-table { width: 100%; border-collapse: collapse; margin-top: 25px; margin-bottom: 25px; font-size: 0.85rem; }
     .print-table th { border-bottom: 2px solid #555; padding: 12px; text-align: left; background: #eaeded; color: #333; }
     .print-table td { padding: 12px; border-bottom: 1px solid rgba(0,0,0,0.03); vertical-align: middle; }
-    .print-table tr:hover td { background-color: transparent; } /* Desactivar hover en impresión modal */
     
     .print-summary-box { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; padding-top: 20px; border-top: 3px solid #333; margin-top: 15px; }
     .print-summary-line { font-size: 1rem; color: #555; }
     .print-total { font-size: 1.5rem; font-weight: 900; color: var(--ho-coral); margin-top: 8px; letter-spacing: -0.5px; }
     .print-conditions { margin-top: 45px; font-size: 0.8rem; color: #7f8c8d; border-top: 1px dashed rgba(0,0,0,0.08); padding-top: 18px; line-height: 1.4; }
 
-    .no-results { grid-column: 1 / -1; text-align: center; padding: 30px 0; color: #888; font-size: 1.2rem; background: rgba(255,255,255,0.6); border-radius: 12px; border: 1px dashed rgba(0,0,0,0.06); margin: 20px 0; }
+    .no-results { grid-column: 1 / -1; text-align: center; padding: 40px 0; color: #888; font-size: 1.2rem; background: rgba(255,255,255,0.6); border-radius: 12px; border: 1px dashed rgba(0,0,0,0.06); margin: 20px 0; }
 
-    /* AJUSTES EXCLUSIVOS PARA IMPRESIÓN EN PAPEL/PDF */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* AJUSTES PARA IMPRESIÓN */
     @media print {
       body { padding: 0; background: white; }
       body * { visibility: hidden; }
@@ -185,10 +191,12 @@
   <div class="search-container">
     <input type="text" id="buscador" class="search-box" placeholder="Escribí para buscar... Ej: Ventana 1200x1160, Puerta, Portón">
     
+    <div class="filter-section-title">Categorías Rápidas</div>
     <div class="category-filters" id="contenedor-filtros">
       <button class="filter-btn active" data-cat="Todos">Todos los Productos</button>
     </div>
 
+    <div class="filter-section-title">Filtros Avanzados</div>
     <div class="advanced-filters">
       <div class="filter-group">
         <label for="select-linea">Filtrar por Línea</label>
@@ -204,6 +212,8 @@
         </select>
       </div>
     </div>
+
+    <div id="active-chips-container" class="active-chips-container"></div>
   </div>
 
   <div class="controls-row">
@@ -251,460 +261,4 @@
       <div class="modal-budget-actions">
         <span>Presupuesto de Obra</span>
         <div>
-          <button id="btn-print-now" class="btn-print">Imprimir / Guardar PDF</button>
-          <button id="btn-close-budget-modal" class="btn-close-budget">Cerrar</button>
-        </div>
-      </div>
-      <div class="print-area">
-        <div class="print-header">
-          <div class="print-company-info">
-            <h2>FÁBRICA DE ABERTURAS</h2>
-            <p>Cotizaciones Comerciales - Validez Regular</p>
-          </div>
-          <div class="print-budget-title">
-            <h3>Presupuesto</h3>
-            <p id="print-date">Fecha: --/--/----</p>
-          </div>
-        </div>
-        
-        <table class="print-table">
-          <thead>
-            <tr>
-              <th style="width: 80px;">Cant.</th>
-              <th>Abertura / Descripción Detallada</th>
-              <th style="width: 120px;">Medida</th>
-              <th style="width: 150px;">Precio Unit. (Neto)</th>
-              <th style="width: 130px;">Subtotal</th>
-            </tr>
-          </thead>
-          <tbody id="print-table-body"></tbody>
-        </table>
-
-        <div class="print-summary-box">
-          <div class="print-summary-line">Suma Total Lista: <span id="print-subtotal-value">$0</span></div>
-          <div class="print-summary-line" style="color: var(--danger); font-weight: 500;">Bonificación (<span id="print-bonif-percentage">0</span>%): <span id="print-discount-value">-$0</span></div>
-          <div id="print-total-value" class="print-total">TOTAL FINAL NETO: $0</div>
-        </div>
-
-        <div class="print-conditions">
-          <p><strong>Condiciones Generales:</strong> Precios sujetos a variaciones de insumos sin previo aviso. Plazos de entrega a coordinar.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script src="productos.js"></script>
-  <script>
-    let categoriaSeleccionada = "Todos";
-    let vistaActiva = "grid";
-    let carrito = []; 
-    
-    const buscador = document.getElementById('buscador');
-    const contenedorPrincipal = document.getElementById('contenedor-principal');
-    const contador = document.getElementById('contador');
-    const contenedorFiltros = document.getElementById('contenedor-filtros');
-    const btnLimpiar = document.getElementById('btn-limpiar');
-    const selectLinea = document.getElementById('select-linea');
-    const selectMedida = document.getElementById('select-medida');
-    
-    const btnViewGrid = document.getElementById('btn-view-grid');
-    const btnViewTable = document.getElementById('btn-view-table');
-
-    const floatingCartBtn = document.getElementById('floating-cart-btn');
-    const cartSidebar = document.getElementById('cart-sidebar');
-    const cartCloseBtn = document.getElementById('cart-close-btn');
-    const cartItemsList = document.getElementById('cart-items-list');
-    const cartTotalValue = document.getElementById('cart-total-value');
-    const cartCount = document.getElementById('cart-count');
-    const btnOpenBudget = document.getElementById('btn-open-budget');
-    const cartBonifInput = document.getElementById('cart-bonif-input');
-    
-    const modalBudget = document.getElementById('modal-budget');
-    const btnCloseBudgetModal = document.getElementById('btn-close-budget-modal');
-    const btnPrintNow = document.getElementById('btn-print-now');
-    const printTableBody = document.getElementById('print-table-body');
-    const printSubtotalValue = document.getElementById('print-subtotal-value');
-    const printBonifPercentage = document.getElementById('print-bonif-percentage');
-    const printDiscountValue = document.getElementById('print-discount-value');
-    const printTotalValue = document.getElementById('print-total-value');
-    const printDate = document.getElementById('print-date');
-
-    // Carga inicial y normalización de IDs de productos.js
-    listadoProductos.forEach((p, index) => {
-      p.id = p.id || `prod-${index}`;
-      const precioGuardado = localStorage.getItem(`precio-${p.id}`);
-      if (precioGuardado) {
-        p.precio = precioGuardado;
-      }
-    });
-
-    // Inyectar Categorías dinámicamente sin emojis
-    const categorias = [...new Set(listadoProductos.map(p => p.categoria))];
-    categorias.forEach(cat => {
-      const btn = document.createElement('button');
-      btn.className = 'filter-btn';
-      btn.textContent = cat;
-      btn.setAttribute('data-cat', cat);
-      contenedorFiltros.appendChild(btn);
-    });
-
-    function actualizarDesplegables() {
-      const lineaPrevia = selectLinea.value;
-      const medidaPrevia = selectMedida.value;
-
-      selectLinea.innerHTML = '<option value="Todos">Todas</option>';
-      selectMedida.innerHTML = '<option value="Todos">Todas</option>';
-
-      const productosDeCategoria = listadoProductos.filter(p => {
-        return categoriaSeleccionada === "Todos" || p.categoria === categoriaSeleccionada;
-      });
-
-      const lineasUnicas = [...new Set(productosDeCategoria.map(p => p.linea))].sort();
-      const medidasUnicas = [...new Set(productosDeCategoria.map(p => p.medida))].sort();
-
-      lineasUnicas.forEach(linea => {
-        const opt = document.createElement('option');
-        opt.value = linea;
-        opt.textContent = linea;
-        selectLinea.appendChild(opt);
-      });
-
-      medidasUnicas.forEach(medida => {
-        const opt = document.createElement('option');
-        opt.value = medida;
-        opt.textContent = medida;
-        selectMedida.appendChild(opt);
-      });
-
-      if (lineasUnicas.includes(lineaPrevia)) selectLinea.value = lineaPrevia;
-      if (medidasUnicas.includes(medidaPrevia)) selectMedida.value = medidaPrevia;
-    }
-
-    function renderizarProductos() {
-      const textoBusqueda = buscador.value.toLowerCase().trim();
-      const lineaSeleccionada = selectLinea.value;
-      const medidaSeleccionada = selectMedida.value;
-
-      if(categoriaSeleccionada !== "Todos" || lineaSeleccionada !== "Todos" || medidaSeleccionada !== "Todos" || textoBusqueda !== "") {
-        btnLimpiar.style.display = "inline";
-      } else {
-        btnLimpiar.style.display = "none";
-      }
-
-      contenedorPrincipal.innerHTML = '';
-      
-      const productosFiltrados = listadoProductos.filter(p => {
-        const coincideCategoria = (categoriaSeleccionada === "Todos" || p.categoria === categoriaSeleccionada);
-        const coincideLinea = (lineaSeleccionada === "Todos" || p.linea === lineaSeleccionada);
-        const coincideMedida = (medidaSeleccionada === "Todos" || p.medida === medidaSeleccionada);
-        
-        const stringFiltro = `${p.categoria} ${p.linea} ${p.sistema} ${p.detalle} ${p.medida} ${p.variante}`.toLowerCase();
-        const palabras = textoBusqueda.split(' ');
-        const coincideBusqueda = palabras.every(palabra => stringFiltro.includes(palabra));
-
-        return coincideCategoria && coincideLinea && coincideMedida && coincideBusqueda;
-      });
-
-      contador.textContent = `Productos encontrados: ${productosFiltrados.length}`;
-
-      if (productosFiltrados.length === 0) {
-        contenedorPrincipal.style.display = "block";
-        contenedorPrincipal.innerHTML = `<div class="no-results">No se encontraron aberturas con esa combinación de filtros.</div>`;
-        return;
-      }
-
-      if (vistaActiva === "grid") {
-        contenedorPrincipal.className = "grid-productos";
-        contenedorPrincipal.style.display = "grid";
-
-        productosFiltrados.forEach(p => {
-          const card = document.createElement('div');
-          card.className = 'card';
-          card.innerHTML = `
-            <div class="card-header">
-              <div class="cat">${p.categoria}</div>
-              <div class="badge-medida-top">M: ${p.medida}</div>
-            </div>
-            <div class="title">${p.linea}</div>
-            <div class="info-line"><span>Sistema:</span> ${p.sistema}</div>
-            <div class="info-line"><span>Detalle:</span> ${p.detalle}</div>
-            <div class="info-line"><span>Modelo:</span> ${p.variante}</div>
-            
-            <div class="price-container">
-              <span class="price-label">Precio:</span>
-              <div class="price-input-wrapper">
-                <span class="price-symbol">$</span>
-                <input type="number" class="price-input" data-id="${p.id}" value="${p.precio || ''}" placeholder="---">
-              </div>
-            </div>
-            <button class="btn-add-cart action-add" data-id="${p.id}">Agregar al presupuesto</button>
-          `;
-          contenedorPrincipal.appendChild(card);
-        });
-
-      } else if (vistaActiva === "tabla") {
-        contenedorPrincipal.className = ""; 
-        contenedorPrincipal.style.display = "block";
-
-        const wrapperTabla = document.createElement('div');
-        wrapperTabla.className = 'tabla-contenedor';
-
-        let bodyHTML = '';
-        productosFiltrados.forEach(p => {
-          bodyHTML += `
-            <tr>
-              <td><strong style="color: var(--medida-capsule); font-size: 0.8rem; text-transform: uppercase;">${p.categoria}</strong></td>
-              <td><strong>${p.linea}</strong></td>
-              <td>${p.sistema}</td>
-              <td>${p.detalle}</td>
-              <td>${p.variante}</td>
-              <td><span class="badge-medida-top">M: ${p.medida}</span></td>
-              <td>
-                <div class="tabla-price-wrapper">
-                  <span class="price-symbol" style="left:8px; font-size:0.95rem;">$</span>
-                  <input type="number" class="price-input tabla-price-input" data-id="${p.id}" value="${p.precio || ''}" placeholder="---">
-                </div>
-              </td>
-              <td>
-                <button class="tabla-btn-add action-add" data-id="${p.id}">+</button>
-              </td>
-            </tr>
-          `;
-        });
-
-        wrapperTabla.innerHTML = `
-          <table class="tabla-productos">
-            <thead>
-              <tr>
-                <th>Categoría</th>
-                <th>Línea</th>
-                <th>Sistema</th>
-                <th>Detalle</th>
-                <th>Modelo</th>
-                <th>Medida</th>
-                <th>Precio Unit.</th>
-                <th>Acción</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${bodyHTML}
-            </tbody>
-          </table>
-        `;
-        contenedorPrincipal.appendChild(wrapperTabla);
-      }
-    }
-
-    // --- LÓGICA DEL CARRITO Y CÁLCULOS ---
-    function agregarAlCarrito(id) {
-      const prod = listadoProductos.find(p => p.id === id);
-      if (!prod) return;
-
-      const itemExistente = carrito.find(item => item.id === id);
-      if (itemExistente) {
-        itemExistente.cantidad++;
-      } else {
-        carrito.push({
-          id: prod.id,
-          categoria: prod.categoria,
-          linea: prod.linea,
-          sistema: prod.sistema,
-          detalle: prod.detalle,
-          medida: prod.medida,
-          variante: prod.variante,
-          precio: parseFloat(prod.precio) || 0,
-          cantidad: 1
-        });
-      }
-      actualizarCarrito();
-    }
-
-    function actualizarCarrito() {
-      cartItemsList.innerHTML = '';
-      let totalSuma = 0;
-      let totalItems = 0;
-
-      carrito.forEach(item => {
-        const subtotalItem = item.precio * item.cantidad;
-        totalSuma += subtotalItem;
-        totalItems += item.cantidad;
-
-        // Estilización condicional por si el costo unitario base es $0 (¡BONIF!)
-        // Usamos el color Coral para destacar la bonificación
-        const displayPrecioUnitario = item.precio === 0 
-          ? `<span style="color: var(--ho-coral); font-weight: bold; background: #fdedec; padding: 2px 6px; border-radius: 4px; font-size:0.75rem;">¡BONIF!</span>` 
-          : `$${item.precio}`;
-
-        const cartElement = document.createElement('div');
-        cartElement.className = 'cart-item';
-        cartElement.innerHTML = `
-          <div class="cart-item-details">
-            <div class="cart-item-title">${item.linea} (${item.medida})</div>
-            <div class="cart-item-meta">${item.sistema} - P. Unit: ${displayPrecioUnitario}</div>
-          </div>
-          <div class="cart-item-controls">
-            <input type="number" class="qty-input" data-id="${item.id}" value="${item.cantidad}" min="1">
-            <button class="btn-remove-item" data-id="${item.id}">&times;</button>
-          </div>
-        `;
-        cartItemsList.appendChild(cartElement);
-      });
-
-      const porcentajeBonif = parseFloat(cartBonifInput.value) || 0;
-      const descuento = totalSuma * (porcentajeBonif / 100);
-      const totalConDescuento = totalSuma - descuento;
-
-      cartCount.textContent = totalItems;
-      cartTotalValue.textContent = `$${totalConDescuento.toLocaleString('es-AR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
-    }
-
-    // --- ESCUCHADORES DE EVENTOS ---
-    
-    // Guardar precios dinámicamente al escribir en los inputs
-    contenedorPrincipal.addEventListener('input', (e) => {
-      if (e.target.classList.contains('price-input')) {
-        const prodId = e.target.getAttribute('data-id');
-        const nuevoPrecio = parseFloat(e.target.value) || 0;
-        
-        const producto = listadoProductos.find(p => p.id === prodId);
-        if (producto) {
-          producto.precio = nuevoPrecio;
-        }
-        localStorage.setItem(`precio-${prodId}`, e.target.value);
-        
-        const itemEnCarrito = carrito.find(item => item.id === prodId);
-        if (itemEnCarrito) {
-          itemEnCarrito.precio = nuevoPrecio;
-          actualizarCarrito();
-        }
-      }
-    });
-
-    // Detectar clic en el botón "Agregar" (en grilla o tabla)
-    contenedorPrincipal.addEventListener('click', (e) => {
-      const boton = e.target.closest('.action-add');
-      if (boton) {
-        const prodId = boton.getAttribute('data-id');
-        agregarAlCarrito(prodId);
-      }
-    });
-
-    // Cambiar cantidad o eliminar productos directamente dentro del carrito sidebar
-    cartItemsList.addEventListener('input', (e) => {
-      if (e.target.classList.contains('qty-input')) {
-        const id = e.target.getAttribute('data-id');
-        const nuevaCant = parseInt(e.target.value) || 1;
-        const item = carrito.find(i => i.id === id);
-        if (item) {
-          item.cantidad = nuevaCant < 1 ? 1 : nuevaCant;
-          actualizarCarrito();
-        }
-      }
-    });
-
-    cartItemsList.addEventListener('click', (e) => {
-      if (e.target.classList.contains('btn-remove-item')) {
-        const id = e.target.getAttribute('data-id');
-        carrito = carrito.filter(i => i.id !== id);
-        actualizarCarrito();
-      }
-    });
-
-    // Evento para recalcular si se modifica la bonificación global
-    cartBonifInput.addEventListener('input', actualizarCarrito);
-
-    // Sidebar abrir/cerrar
-    floatingCartBtn.addEventListener('click', () => cartSidebar.classList.add('open'));
-    cartCloseBtn.addEventListener('click', () => cartSidebar.classList.remove('open'));
-
-    // Filtros por botón de categorías superiores
-    contenedorFiltros.addEventListener('click', (e) => {
-      if (e.target.classList.contains('filter-btn')) {
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        e.target.classList.add('active');
-        categoriaSeleccionada = e.target.getAttribute('data-cat');
-        actualizarDesplegables();
-        renderizarProductos();
-      }
-    });
-
-    // Filtros avanzados select e inputs
-    selectLinea.addEventListener('change', renderizarProductos);
-    selectMedida.addEventListener('change', renderizarProductos);
-    buscador.addEventListener('input', renderizarProductos);
-
-    // Botón para resetear todos los filtros aplicados (sin emoji)
-    btnLimpiar.addEventListener('click', () => {
-      buscador.value = '';
-      categoriaSeleccionada = "Todos";
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      document.querySelector('[data-cat="Todos"]').classList.add('active');
-      selectLinea.value = "Todos";
-      selectMedida.value = "Todos";
-      actualizarDesplegables();
-      renderizarProductos();
-    });
-
-    // Alternador de vistas de Layout ( Tarjetas / Planilla) - Sin emojis
-    btnViewGrid.addEventListener('click', () => {
-      btnViewGrid.classList.add('active');
-      btnViewTable.classList.remove('active');
-      vistaActiva = "grid";
-      renderizarProductos();
-    });
-
-    btnViewTable.addEventListener('click', () => {
-      btnViewTable.classList.add('active');
-      btnViewGrid.classList.remove('active');
-      vistaActiva = "tabla";
-      renderizarProductos();
-    });
-
-    // --- LÓGICA DE IMPRESIÓN DE PRESUPUESTO --- Sin emojis
-    btnOpenBudget.addEventListener('click', () => {
-      if(carrito.length === 0) {
-        alert("El carrito está vacío. Agregá aberturas para cotizar.");
-        return;
-      }
-
-      printTableBody.innerHTML = '';
-      let subtotalGeneral = 0;
-
-      carrito.forEach(item => {
-        const subtotalItem = item.precio * item.cantidad;
-        subtotalGeneral += subtotalItem;
-
-        const fila = document.createElement('tr');
-        fila.innerHTML = `
-          <td style="text-align: center; font-weight: bold;">${item.cantidad}</td>
-          <td><strong>${item.categoria} ${item.linea}</strong><br><small style="color:#555;">${item.sistema} - ${item.detalle} (${item.variante})</small></td>
-          <td>${item.medida}</td>
-          <td>$${item.precio.toLocaleString('es-AR')}</td>
-          <td style="font-weight: bold;">$${subtotalItem.toLocaleString('es-AR')}</td>
-        `;
-        printTableBody.appendChild(fila);
-      });
-
-      const porcentajeBonif = parseFloat(cartBonifInput.value) || 0;
-      const descuento = subtotalGeneral * (porcentajeBonif / 100);
-      const totalFinal = subtotalGeneral - descuento;
-
-      // Inyectar valores al modal imprimible limpio
-      printSubtotalValue.textContent = `$${subtotalGeneral.toLocaleString('es-AR')}`;
-      printBonifPercentage.textContent = porcentajeBonif;
-      printDiscountValue.textContent = `-$${descuento.toLocaleString('es-AR')}`;
-      printTotalValue.textContent = `TOTAL FINAL NETO: $${totalFinal.toLocaleString('es-AR')}`;
-      printDate.textContent = `Fecha: ${new Date().toLocaleDateString('es-AR')}`;
-
-      modalBudget.classList.add('open');
-    });
-
-    btnCloseBudgetModal.addEventListener('click', () => modalBudget.classList.remove('open'));
-    btnPrintNow.addEventListener('click', () => window.print());
-
-    // Inicializar la App al cargar la pantalla
-    actualizarDesplegables();
-    renderizarProductos();
-  </script>
-</body>
-</html>
+          <button
