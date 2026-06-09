@@ -188,12 +188,12 @@
     /* Badge de Medida Flotante Soft */
     .badge-medida-top { background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(0,0,0,0.04); padding: 5px 12px; border-radius: 9999px; font-weight: 700; font-size: 0.75rem; color: var(--text); white-space: nowrap; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
     
-    /* El Título del Producto resalta más */
+    /* Título del Producto */
     .card .title { font-size: 1.4rem; color: var(--text); font-weight: 800; margin-bottom: 16px; letter-spacing: -0.5px; line-height: 1.2; }
     .card .info-line { margin-bottom: 8px; font-size: 0.9rem; color: #475569; display: flex; justify-content: space-between; border-bottom: 1px dashed rgba(0,0,0,0.04); padding-bottom: 4px; }
     .card .info-line span { font-weight: 600; color: var(--text-muted); }
     
-    /* Caja de Precio Estilo Inputs de Lovable */
+    /* Caja de Precio */
     .price-container { margin-top: auto; padding-top: 18px; border-top: 1px solid rgba(0,0,0,0.05); display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
     .price-label { font-size: 0.9rem; font-weight: 700; color: var(--text); }
     .price-input-wrapper { display: flex; align-items: center; position: relative; flex: 1; }
@@ -215,7 +215,7 @@
     .price-input::-webkit-outer-spin-button, .price-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
     .price-input { -moz-appearance: textfield; }
 
-    /* Botón de Acción con el Degradado Accent de Lovable */
+    /* Botón de Acción */
     .btn-add-cart { 
       width: 100%; 
       padding: 14px; 
@@ -240,7 +240,7 @@
     }
     .btn-add-cart:active { transform: translateY(1px); }
 
-    /* --- VISTA TABLA (CRISTALIZADA) --- */
+    /* --- VISTA TABLA --- */
     .tabla-contenedor { width: 100%; overflow-x: auto; background: var(--card-bg); border-radius: 24px; box-shadow: var(--glass-shadow); border: var(--glass-border); backdrop-filter: var(--blur-effect); -webkit-backdrop-filter: var(--blur-effect); padding: 10px; }
     .tabla-productos { width: 100%; border-collapse: separate; border-spacing: 0 8px; text-align: left; font-size: 0.9rem; }
     .tabla-productos th { color: var(--text-muted); padding: 16px; font-weight: 700; border-bottom: 1px solid rgba(0,0,0,0.05); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -256,7 +256,7 @@
     .tabla-btn-add { padding: 8px 16px; background: var(--gradient-accent); color: white; border: none; border-radius: 9999px; cursor: pointer; font-weight: 700; font-size: 1rem; transition: all 0.2s; }
     .tabla-btn-add:hover { box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); transform: scale(1.05); }
 
-    /* --- INTERFAZ CARRITO / SIDEBAR BAR GLASS --- */
+    /* --- INTERFAZ CARRITO --- */
     .cart-float-btn { 
       position: fixed; 
       bottom: 30px; 
@@ -325,7 +325,7 @@
     .btn-generate-budget { width: 100%; padding: 16px; background: var(--gradient-accent); color: white; border: none; border-radius: 9999px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.25s ease; text-transform: uppercase; letter-spacing: 0.5px; }
     .btn-generate-budget:hover { box-shadow: 0 10px 22px -6px rgba(16, 185, 129, 0.4); }
 
-    /* --- MODAL IMPRESIÓN OFICIAL (MANTIENE BLANCO IMPE cable) --- */
+    /* --- MODAL IMPRESIÓN OFICIAL --- */
     .modal-budget { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(15, 23, 42, 0.3); z-index: 2000; display: none; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(8px); }
     .modal-budget.open { display: flex; }
     .modal-budget-content { background: white; width: 100%; max-width: 885px; max-height: 92vh; border-radius: 24px; display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15); overflow: hidden; border: 1px solid rgba(255,255,255,0.2); }
@@ -532,7 +532,7 @@
       }
     });
 
-    // Inyectar Categorías dinámicamente sin emojis
+    // Inyectar Categorías dinámicamente
     const categorias = [...new Set(listadoProductos.map(p => p.categoria))];
     categorias.forEach(cat => {
       const btn = document.createElement('button');
@@ -687,9 +687,33 @@
         `;
         contenedorPrincipal.appendChild(wrapperTabla);
       }
+      
+      // Asignar listeners a los botones e inputs recién renderizados
+      document.querySelectorAll('.action-add').forEach(btn => {
+        btn.addEventListener('click', () => agregarAlCarrito(btn.getAttribute('data-id')));
+      });
+
+      document.querySelectorAll('.qty-input').forEach(input => {
+        input.addEventListener('change', (e) => {
+          const id = e.target.getAttribute('data-id');
+          const nuevaCantidad = parseInt(e.target.value) || 1;
+          const item = carrito.find(i => i.id === id);
+          if (item) {
+            item.cantidad = Math.max(1, nuevaCantidad);
+            actualizarCarrito();
+          }
+        });
+      });
+
+      document.querySelectorAll('.btn-remove-item').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const id = e.target.getAttribute('data-id');
+          carrito = carrito.filter(item => item.id !== id);
+          actualizarCarrito();
+        });
+      });
     }
 
-    // --- LÓGICA DEL CARRITO Y CÁLCULOS ---
     function agregarAlCarrito(id) {
       const prod = listadoProductos.find(p => p.id === id);
       if (!prod) return;
@@ -748,7 +772,138 @@
 
       cartCount.textContent = totalItems;
       cartTotalValue.textContent = `$${totalConDescuento.toLocaleString('es-AR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
+      
+      // Resincronizar eventos de borrado y cantidad tras reconstruir HTML del sidebar
+      document.querySelectorAll('.qty-input').forEach(input => {
+        input.addEventListener('change', (e) => {
+          const id = e.target.getAttribute('data-id');
+          const nuevaCantidad = parseInt(e.target.value) || 1;
+          const item = carrito.find(i => i.id === id);
+          if (item) {
+            item.cantidad = Math.max(1, nuevaCantidad);
+            actualizarCarrito();
+          }
+        });
+      });
+
+      document.querySelectorAll('.btn-remove-item').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const id = e.target.getAttribute('data-id');
+          carrito = carrito.filter(item => item.id !== id);
+          actualizarCarrito();
+        });
+      });
     }
+
+    // Listener para guardar precios dinámicamente
+    contenedorPrincipal.addEventListener('input', (e) => {
+      if (e.target.classList.contains('price-input')) {
+        const id = e.target.getAttribute('data-id');
+        const nuevoPrecio = e.target.value;
+        const prod = listadoProductos.find(p => p.id === id);
+        if (prod) {
+          prod.precio = nuevoPrecio;
+          localStorage.setItem(`precio-${id}`, nuevoPrecio);
+          
+          const itemCarro = carrito.find(item => item.id === id);
+          if (itemCarro) {
+            itemCarro.precio = parseFloat(nuevoPrecio) || 0;
+            actualizarCarrito();
+          }
+        }
+      }
+    });
+
+    // Lógica de filtros, vistas y sidebar
+    buscador.addEventListener('input', renderizarProductos);
+    btnLimpiar.addEventListener('click', () => {
+      buscador.value = "";
+      categoriaSeleccionada = "Todos";
+      selectLinea.value = "Todos";
+      selectMedida.value = "Todos";
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      document.querySelector('[data-cat="Todos"]').classList.add('active');
+      actualizarDesplegables();
+      renderizarProductos();
+    });
+
+    contenedorFiltros.addEventListener('click', (e) => {
+      if(e.target.classList.contains('filter-btn')) {
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+        e.target.classList.add('active');
+        categoriaSeleccionada = e.target.getAttribute('data-cat');
+        actualizarDesplegables();
+        renderizarProductos();
+      }
+    });
+
+    selectLinea.addEventListener('change', renderizarProductos);
+    selectMedida.addEventListener('change', renderizarProductos);
+
+    btnViewGrid.addEventListener('click', () => {
+      vistaActiva = "grid";
+      btnViewGrid.classList.add('active');
+      btnViewTable.classList.remove('active');
+      renderizarProductos();
+    });
+
+    btnViewTable.addEventListener('click', () => {
+      vistaActiva = "tabla";
+      btnViewTable.classList.add('active');
+      btnViewGrid.classList.remove('active');
+      renderizarProductos();
+    });
+
+    floatingCartBtn.addEventListener('click', () => cartSidebar.classList.add('open'));
+    cartCloseBtn.addEventListener('click', () => cartSidebar.classList.remove('open'));
+
+    cartBonifInput.addEventListener('input', actualizarCarrito);
+
+    btnOpenBudget.addEventListener('click', () => {
+      if (carrito.length === 0) {
+        alert("El presupuesto está vacío. Agrega ítems primero.");
+        return;
+      }
+      
+      printTableBody.innerHTML = '';
+      let subtotalGeneral = 0;
+
+      carrito.forEach(item => {
+        const subtotalItem = item.precio * item.cantidad;
+        subtotalGeneral += subtotalItem;
+
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${item.cantidad}</td>
+          <td><strong>${item.linea}</strong><br><small style="color:#64748b">${item.sistema} - ${item.detalle} (${item.variante})</small></td>
+          <td>${item.medida}</td>
+          <td>$${item.precio}</td>
+          <td>$${subtotalItem}</td>
+        `;
+        printTableBody.appendChild(row);
+      });
+
+      const porcentaje = parseFloat(cartBonifInput.value) || 0;
+      const descu = subtotalGeneral * (porcentaje / 100);
+      const final = subtotalGeneral - descu;
+
+      printSubtotalValue.textContent = `$${subtotalGeneral.toLocaleString('es-AR')}`;
+      printBonifPercentage.textContent = porcentaje;
+      printDiscountValue.textContent = `-$${descu.toLocaleString('es-AR')}`;
+      printTotalValue.textContent = `TOTAL FINAL NETO: $${final.toLocaleString('es-AR')}`;
+      
+      const hoy = new Date();
+      printDate.textContent = `Fecha: ${hoy.toLocaleDateString('es-AR')}`;
+
+      modalBudget.classList.add('open');
+    });
+
+    btnCloseBudgetModal.addEventListener('click', () => modalBudget.classList.remove('open'));
+    btnPrintNow.addEventListener('click', () => window.print());
+
+    // Inicialización al cargar el script productos.js
+    actualizarDesplegables();
+    renderizarProductos();
   </script>
 </body>
 </html>
