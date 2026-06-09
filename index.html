@@ -31,10 +31,10 @@
     /* Fondo Aurora Mesh Gradient Dinámico */
     body { 
       background: radial-gradient(circle at 0% 0%, #e0f2fe 0%, transparent 45%),
-                  radial-gradient(circle at 100% 0%, #fce7f3 0%, transparent 45%),
-                  radial-gradient(circle at 100% 100%, #fef08a 0%, transparent 40%),
-                  radial-gradient(circle at 0% 100%, #e0e7ff 0%, transparent 45%),
-                  var(--bg);
+                radial-gradient(circle at 100% 0%, #fce7f3 0%, transparent 45%),
+                radial-gradient(circle at 100% 100%, #fef08a 0%, transparent 40%),
+                radial-gradient(circle at 0% 100%, #e0e7ff 0%, transparent 45%),
+                var(--bg);
       background-attachment: fixed;
       color: var(--text); 
       padding: 30px 20px; 
@@ -240,14 +240,19 @@
     }
     .btn-add-cart:active { transform: translateY(1px); }
 
-    /* --- VISTA TABLA --- */
-    .tabla-contenedor { width: 100%; overflow-x: auto; background: var(--card-bg); border-radius: 24px; box-shadow: var(--glass-shadow); border: var(--glass-border); backdrop-filter: var(--blur-effect); -webkit-backdrop-filter: var(--blur-effect); padding: 10px; }
-    .tabla-productos { width: 100%; border-collapse: separate; border-spacing: 0 8px; text-align: left; font-size: 0.9rem; }
-    .tabla-productos th { color: var(--text-muted); padding: 16px; font-weight: 700; border-bottom: 1px solid rgba(0,0,0,0.05); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; }
-    .tabla-productos td { padding: 16px; background: rgba(255, 255, 255, 0.3); color: var(--text); vertical-align: middle; transition: background 0.2s; }
-    .tabla-productos tr td:first-child { border-radius: 14px 0 0 14px; }
-    .tabla-productos tr td:last-child { border-radius: 0 14px 14px 0; }
-    .tabla-productos tr:hover td { background: rgba(255, 255, 255, 0.7); }
+    /* --- VISTA TABLA (ACORDEÓN COMPACTO) --- */
+    .tabla-contenedor { width: 100%; overflow-x: auto; background: var(--card-bg); border-radius: 24px; box-shadow: var(--glass-shadow); border: var(--glass-border); backdrop-filter: var(--blur-effect); -webkit-backdrop-filter: var(--blur-effect); padding: 20px; }
+    .tabla-productos { width: 100%; border-collapse: separate; border-spacing: 0 4px; text-align: left; font-size: 0.9rem; }
+    .tabla-productos th { color: var(--text-muted); padding: 12px 16px; font-weight: 700; border-bottom: 2px solid rgba(0,0,0,0.05); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; }
+    
+    .oculto { display: none; }
+    .fila-grupo { cursor: pointer; transition: background-color 0.2s; }
+    .fila-grupo:hover { background-color: rgba(168, 85, 247, 0.15) !important; }
+
+    .subtabla-contenedor td { padding: 0 !important; background: transparent !important; }
+    .subtabla { width: 100%; border-collapse: collapse; background: rgba(255, 255, 255, 0.2); }
+    .subtabla td { padding: 14px 16px; border-bottom: 1px solid rgba(0,0,0,0.03); color: var(--text); vertical-align: middle; }
+    .subtabla tr:hover { background: rgba(255, 255, 255, 0.6); }
     
     .tabla-price-wrapper { display: flex; align-items: center; position: relative; width: 130px; }
     .tabla-price-input { width: 100%; padding: 10px 10px 10px 24px; border: 1px solid rgba(0,0,0,0.05); border-radius: 10px; font-weight: 800; color: #ec4899; outline: none; background: rgba(255,255,255,0.7); font-size: 1rem; }
@@ -574,6 +579,11 @@
       if (medidasUnicas.includes(medidaPrevia)) selectMedida.value = medidaPrevia;
     }
 
+    function toggleDesplegable(id) {
+      const el = document.getElementById(id);
+      if (el) el.classList.toggle('oculto');
+    }
+
     function renderizarProductos() {
       const textoBusqueda = buscador.value.toLowerCase().trim();
       const lineaSeleccionada = selectLinea.value;
@@ -643,194 +653,207 @@
         const wrapperTabla = document.createElement('div');
         wrapperTabla.className = 'tabla-contenedor';
 
-        let bodyHTML = '';
+        // Agrupación por Categoría + Línea
+        const grupos = {};
         productosFiltrados.forEach(p => {
-          bodyHTML += `
-            <tr>
-              <td><strong style="color: #a855f7; font-size: 0.8rem; text-transform: uppercase;">${p.categoria}</strong></td>
-              <td><strong>${p.linea}</strong></td>
-              <td>${p.sistema}</td>
-              <td>${p.detalle}</td>
-              <td>${p.variante}</td>
-              <td><span class="badge-medida-top">M: ${p.medida}</span></td>
-              <td>
-                <div class="tabla-price-wrapper">
-                  <span class="price-symbol" style="left:12px; font-size:0.95rem;">$</span>
-                  <input type="number" class="price-input tabla-price-input" data-id="${p.id}" value="${p.precio || ''}" placeholder="---">
-                </div>
+          const clave = `${p.categoria} :: ${p.linea}`;
+          if (!grupos[clave]) grupos[clave] = [];
+          grupos[clave].push(p);
+        });
+
+        let tablaHTML = `
+          <table class="tabla-productos">
+            <thead>
+              <tr>
+                <th>Sistema / Abertura</th>
+                <th>Detalle Técnico</th>
+                <th>Modelo / Variante</th>
+                <th>Medida</th>
+                <th style="width: 140px;">Precio Unit.</th>
+                <th style="width: 80px;">Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+        `;
+
+        Object.keys(grupos).forEach((clave, idx) => {
+          const items = grupos[clave];
+          const idGrupo = `grupo-acord-${idx}`;
+          
+          tablaHTML += `
+            <tr class="fila-grupo" onclick="toggleDesplegable('${idGrupo}')" style="background: rgba(168, 85, 247, 0.08);">
+              <td colspan="6" style="padding: 16px; font-weight: 800; color: #a855f7; letter-spacing: -0.2px;">
+                📂 ${clave} <span style="font-size: 0.8rem; color: #64748b; font-weight: 500; margin-left: 10px;">(${items.length} ítems) ⬇️</span>
               </td>
-              <td>
-                <button class="tabla-btn-add action-add" data-id="${p.id}">+</button>
+            </tr>
+            <tr id="${idGrupo}" class="desplegable oculto">
+              <td colspan="6" class="subtabla-contenedor">
+                <table class="subtabla">
+                  <tbody>
+          `;
+
+          items.forEach(p => {
+            tablaHTML += `
+                    <tr>
+                      <td style="font-weight: 700; color: #334155;">${p.sistema}</td>
+                      <td>${p.detalle}</td>
+                      <td>${p.variante}</td>
+                      <td style="white-space: nowrap; font-weight: 600;">${p.medida}</td>
+                      <td>
+                        <div class="tabla-price-wrapper">
+                          <span style="position: absolute; left: 12px; font-weight: 800; color: #ec4899;">$</span>
+                          <input type="number" class="tabla-price-input price-input" data-id="${p.id}" value="${p.precio || ''}" placeholder="---">
+                        </div>
+                      </td>
+                      <td>
+                        <button class="tabla-btn-add action-add" data-id="${p.id}">+</button>
+                      </td>
+                    </tr>
+            `;
+          });
+
+          tablaHTML += `
+                  </tbody>
+                </table>
               </td>
             </tr>
           `;
         });
 
-        wrapperTabla.innerHTML = `
-          <table class="tabla-productos">
-            <thead>
-              <tr>
-                <th>Categoría</th>
-                <th>Línea</th>
-                <th>Sistema</th>
-                <th>Detalle</th>
-                <th>Modelo</th>
-                <th>Medida</th>
-                <th>Precio Unit.</th>
-                <th>Acción</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${bodyHTML}
+        tablaHTML += `
             </tbody>
           </table>
         `;
+
+        wrapperTabla.innerHTML = tablaHTML;
         contenedorPrincipal.appendChild(wrapperTabla);
       }
-      
-      // Asignar listeners a los botones e inputs recién renderizados
+
+      // Re-enlazar eventos globales de los botones añadidos dinámicamente
       document.querySelectorAll('.action-add').forEach(btn => {
-        btn.addEventListener('click', () => agregarAlCarrito(btn.getAttribute('data-id')));
+        btn.addEventListener('click', (e) => {
+          const id = e.target.getAttribute('data-id');
+          agregarAlCarrito(id);
+        });
       });
 
-      document.querySelectorAll('.qty-input').forEach(input => {
-        input.addEventListener('change', (e) => {
+      // Re-enlazar eventos de guardado de precios en inputs de tabla y grilla
+      document.querySelectorAll('.price-input, .price-input-tabla').forEach(input => {
+        input.addEventListener('input', (e) => {
           const id = e.target.getAttribute('data-id');
-          const nuevaCantidad = parseInt(e.target.value) || 1;
-          const item = carrito.find(i => i.id === id);
-          if (item) {
-            item.cantidad = Math.max(1, nuevaCantidad);
-            actualizarCarrito();
+          const valor = e.target.value;
+          const prod = listadoProductos.find(p => p.id === id);
+          if (prod) {
+            prod.precio = valor;
+            localStorage.setItem(`precio-${id}`, valor);
+            sincronizarPrecios(id, valor);
           }
         });
       });
+    }
 
-      document.querySelectorAll('.btn-remove-item').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-          const id = e.target.getAttribute('data-id');
-          carrito = carrito.filter(item => item.id !== id);
-          actualizarCarrito();
-        });
+    // Sincronizar precio entre vistas (tabla, grilla y carrito)
+    function sincronizarPrecios(id, nuevoValor) {
+      document.querySelectorAll(`input[data-id="${id}"]`).forEach(input => {
+        if (input.value !== nuevoValor) input.value = nuevoValor;
       });
+      const itemEnCarrito = carrito.find(c => c.id === id);
+      if (itemEnCarrito) {
+        itemEnCarrito.precio = parseFloat(nuevoValor) || 0;
+        calcularTotalCarrito();
+      }
     }
 
     function agregarAlCarrito(id) {
       const prod = listadoProductos.find(p => p.id === id);
       if (!prod) return;
+      
+      const precioUnit = parseFloat(prod.precio) || 0;
+      const existe = carrito.find(c => c.id === id);
 
-      const itemExistente = carrito.find(item => item.id === id);
-      if (itemExistente) {
-        itemExistente.cantidad++;
+      if (existe) {
+        existe.cantidad++;
       } else {
         carrito.push({
           id: prod.id,
-          categoria: prod.categoria,
-          linea: prod.linea,
-          sistema: prod.sistema,
-          detalle: prod.detalle,
+          titulo: `${prod.categoria} - ${prod.linea}`,
+          descripcion: `${prod.sistema} | ${prod.detalle} | ${prod.variante}`,
           medida: prod.medida,
-          variante: prod.variante,
-          precio: parseFloat(prod.precio) || 0,
+          precio: precioUnit,
           cantidad: 1
         });
       }
-      actualizarCarrito();
+      renderizarCarrito();
+      
+      // Animación suave de botón flotante
+      floatingCartBtn.style.transform = 'scale(1.08)';
+      setTimeout(() => floatingCartBtn.style.transform = 'none', 200);
     }
 
-    function actualizarCarrito() {
+    function renderizarCarrito() {
       cartItemsList.innerHTML = '';
-      let totalSuma = 0;
-      let totalItems = 0;
+      let totalCantidad = 0;
 
-      carrito.forEach(item => {
-        const subtotalItem = item.precio * item.cantidad;
-        totalSuma += subtotalItem;
-        totalItems += item.cantidad;
-
-        const displayPrecioUnitario = item.precio === 0 
-          ? `<span style="color: var(--danger); font-weight: bold; background: #fdedec; padding: 2px 6px; border-radius: 4px; font-size:0.75rem;">¡BONIF!</span>` 
-          : `$${item.precio}`;
-
-        const cartElement = document.createElement('div');
-        cartElement.className = 'cart-item';
-        cartElement.innerHTML = `
+      carrito.forEach((item, idx) => {
+        totalCantidad += item.cantidad;
+        const div = document.createElement('div');
+        div.className = 'cart-item';
+        div.innerHTML = `
           <div class="cart-item-details">
-            <div class="cart-item-title">${item.linea} (${item.medida})</div>
-            <div class="cart-item-meta">${item.sistema} - P. Unit: ${displayPrecioUnitario}</div>
+            <div class="cart-item-title">${item.titulo}</div>
+            <div class="cart-item-meta">${item.descripcion} - M: ${item.medida}</div>
+            <div style="font-weight: 700; color: #ec4899; margin-top: 6px;">$${(item.precio * item.cantidad).toFixed(2)}</div>
           </div>
           <div class="cart-item-controls">
-            <input type="number" class="qty-input" data-id="${item.id}" value="${item.cantidad}" min="1">
-            <button class="btn-remove-item" data-id="${item.id}">&times;</button>
+            <input type="number" class="qty-input" value="${item.cantidad}" min="1" data-idx="${idx}">
+            <button class="btn-remove-item" data-idx="${idx}">&times;</button>
           </div>
         `;
-        cartItemsList.appendChild(cartElement);
+        cartItemsList.appendChild(div);
       });
 
-      const porcentajeBonif = parseFloat(cartBonifInput.value) || 0;
-      const descuento = totalSuma * (porcentajeBonif / 100);
-      const totalConDescuento = totalSuma - descuento;
+      cartCount.textContent = totalCantidad;
 
-      cartCount.textContent = totalItems;
-      cartTotalValue.textContent = `$${totalConDescuento.toLocaleString('es-AR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
-      
-      // Resincronizar eventos de borrado y cantidad tras reconstruir HTML del sidebar
+      // Eventos de cantidad en sidebar
       document.querySelectorAll('.qty-input').forEach(input => {
         input.addEventListener('change', (e) => {
-          const id = e.target.getAttribute('data-id');
-          const nuevaCantidad = parseInt(e.target.value) || 1;
-          const item = carrito.find(i => i.id === id);
-          if (item) {
-            item.cantidad = Math.max(1, nuevaCantidad);
-            actualizarCarrito();
+          const idx = e.target.getAttribute('data-idx');
+          const nuevaCant = parseInt(e.target.value) || 1;
+          if (nuevaCant >= 1) {
+            carrito[idx].cantidad = nuevaCant;
+            calcularTotalCarrito();
           }
         });
       });
 
+      // Eventos de eliminar en sidebar
       document.querySelectorAll('.btn-remove-item').forEach(btn => {
         btn.addEventListener('click', (e) => {
-          const id = e.target.getAttribute('data-id');
-          carrito = carrito.filter(item => item.id !== id);
-          actualizarCarrito();
+          const idx = e.target.getAttribute('data-idx');
+          carrito.splice(idx, 1);
+          renderizarCarrito();
         });
       });
+
+      calcularTotalCarrito();
     }
 
-    // Listener para guardar precios dinámicamente
-    contenedorPrincipal.addEventListener('input', (e) => {
-      if (e.target.classList.contains('price-input')) {
-        const id = e.target.getAttribute('data-id');
-        const nuevoPrecio = e.target.value;
-        const prod = listadoProductos.find(p => p.id === id);
-        if (prod) {
-          prod.precio = nuevoPrecio;
-          localStorage.setItem(`precio-${id}`, nuevoPrecio);
-          
-          const itemCarro = carrito.find(item => item.id === id);
-          if (itemCarro) {
-            itemCarro.precio = parseFloat(nuevoPrecio) || 0;
-            actualizarCarrito();
-          }
-        }
-      }
-    });
+    function calcularTotalCarrito() {
+      let subtotal = carrito.reduce((acc, item) => acc + (item.precio * item.cantidad), 0);
+      const bonif = parseFloat(cartBonifInput.value) || 0;
+      const descuento = (subtotal * bonif) / 100;
+      const totalFinal = subtotal - descuento;
 
-    // Lógica de filtros, vistas y sidebar
-    buscador.addEventListener('input', renderizarProductos);
-    btnLimpiar.addEventListener('click', () => {
-      buscador.value = "";
-      categoriaSeleccionada = "Todos";
-      selectLinea.value = "Todos";
-      selectMedida.value = "Todos";
-      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-      document.querySelector('[data-cat="Todos"]').classList.add('active');
-      actualizarDesplegables();
-      renderizarProductos();
-    });
+      cartTotalValue.textContent = `$${totalFinal.toFixed(2)}`;
+    }
 
-    contenedorFiltros.addEventListener('click', (e) => {
-      if(e.target.classList.contains('filter-btn')) {
-        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+    // Control de Filtros
+    document.addEventListener('click', (e) => {
+      if(e.target && e.target.classList.contains('filter-btn')) {
+        const botones = contenedorFiltros.querySelectorAll('.filter-btn');
+        botones.forEach(btn => btn.classList.remove('active'));
         e.target.classList.add('active');
+        
         categoriaSeleccionada = e.target.getAttribute('data-cat');
         actualizarDesplegables();
         renderizarProductos();
@@ -839,59 +862,75 @@
 
     selectLinea.addEventListener('change', renderizarProductos);
     selectMedida.addEventListener('change', renderizarProductos);
-
-    btnViewGrid.addEventListener('click', () => {
-      vistaActiva = "grid";
-      btnViewGrid.classList.add('active');
-      btnViewTable.classList.remove('active');
+    
+    buscador.addEventListener('input', renderizarProductos);
+    btnLimpiar.addEventListener('click', () => {
+      buscador.value = '';
+      selectLinea.value = 'Todos';
+      selectMedida.value = 'Todos';
       renderizarProductos();
+    });
+
+    // Control de vistas (Grilla vs Tabla)
+    btnViewGrid.addEventListener('click', () => {
+      if(vistaActiva !== "grid") {
+        vistaActiva = "grid";
+        btnViewTable.classList.remove('active');
+        btnViewGrid.classList.add('active');
+        renderizarProductos();
+      }
     });
 
     btnViewTable.addEventListener('click', () => {
-      vistaActiva = "tabla";
-      btnViewTable.classList.add('active');
-      btnViewGrid.classList.remove('active');
-      renderizarProductos();
+      if(vistaActiva !== "tabla") {
+        vistaActiva = "tabla";
+        btnViewGrid.classList.remove('active');
+        btnViewTable.classList.add('active');
+        renderizarProductos();
+      }
     });
 
+    // Control Sidebar Carrito
     floatingCartBtn.addEventListener('click', () => cartSidebar.classList.add('open'));
     cartCloseBtn.addEventListener('click', () => cartSidebar.classList.remove('open'));
+    cartBonifInput.addEventListener('input', calcularTotalCarrito);
 
-    cartBonifInput.addEventListener('input', actualizarCarrito);
-
+    // Modal de Impresión
     btnOpenBudget.addEventListener('click', () => {
-      if (carrito.length === 0) {
-        alert("El presupuesto está vacío. Agrega ítems primero.");
+      if(carrito.length === 0) {
+        alert("El presupuesto está vacío. Añade algunas aberturas primero.");
         return;
       }
       
-      printTableBody.innerHTML = '';
-      let subtotalGeneral = 0;
+      const printTBody = document.getElementById('print-table-body');
+      printTBody.innerHTML = '';
+      
+      let subtotalLista = 0;
 
       carrito.forEach(item => {
         const subtotalItem = item.precio * item.cantidad;
-        subtotalGeneral += subtotalItem;
-
-        const row = document.createElement('tr');
-        row.innerHTML = `
+        subtotalLista += subtotalItem;
+        
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
           <td>${item.cantidad}</td>
-          <td><strong>${item.linea}</strong><br><small style="color:#64748b">${item.sistema} - ${item.detalle} (${item.variante})</small></td>
+          <td><strong>${item.titulo}</strong><br><span style="font-size:0.75rem; color:#64748b;">${item.descripcion}</span></td>
           <td>${item.medida}</td>
-          <td>$${item.precio}</td>
-          <td>$${subtotalItem}</td>
+          <td>$${item.precio.toFixed(2)}</td>
+          <td>$${subtotalItem.toFixed(2)}</td>
         `;
-        printTableBody.appendChild(row);
+        printTBody.appendChild(tr);
       });
 
-      const porcentaje = parseFloat(cartBonifInput.value) || 0;
-      const descu = subtotalGeneral * (porcentaje / 100);
-      const final = subtotalGeneral - descu;
+      const bonif = parseFloat(cartBonifInput.value) || 0;
+      const descuento = (subtotalLista * bonif) / 100;
+      const totalFinal = subtotalLista - descuento;
 
-      printSubtotalValue.textContent = `$${subtotalGeneral.toLocaleString('es-AR')}`;
-      printBonifPercentage.textContent = porcentaje;
-      printDiscountValue.textContent = `-$${descu.toLocaleString('es-AR')}`;
-      printTotalValue.textContent = `TOTAL FINAL NETO: $${final.toLocaleString('es-AR')}`;
-      
+      printSubtotalValue.textContent = `$${subtotalLista.toFixed(2)}`;
+      printBonifPercentage.textContent = bonif;
+      printDiscountValue.textContent = `-$${descuento.toFixed(2)}`;
+      printTotalValue.textContent = `TOTAL FINAL NETO: $${totalFinal.toFixed(2)}`;
+
       const hoy = new Date();
       printDate.textContent = `Fecha: ${hoy.toLocaleDateString('es-AR')}`;
 
@@ -901,7 +940,7 @@
     btnCloseBudgetModal.addEventListener('click', () => modalBudget.classList.remove('open'));
     btnPrintNow.addEventListener('click', () => window.print());
 
-    // Inicialización al cargar el script productos.js
+    // Inicialización al cargar la página
     actualizarDesplegables();
     renderizarProductos();
   </script>
